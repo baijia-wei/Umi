@@ -7,6 +7,7 @@ export default [
   {
     path: '/dashboard',
     name: '图表页面',
+    access: 'normalRouteFilter',
     icon: 'smile',
     routes: [
       {
@@ -17,14 +18,15 @@ export default [
     ],
   },
 
-  // 用户
   {
     path: '/security',
     name: '用户管理',
+    access: 'normalRouteFilter',
     icon: 'smile',
     routes: [
       {
         path: '/security/role',
+
         name: '角色管理',
         component: '@/pages/security/role/index',
       },
@@ -37,6 +39,7 @@ export default [
   },
   {
     path: '/list',
+    access: 'normalRouteFilter',
     name: '列表页面',
     icon: 'smile',
     routes: [

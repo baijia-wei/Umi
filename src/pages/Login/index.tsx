@@ -1,7 +1,6 @@
 import { Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Form, Toast, Button } from '@douyinfe/semi-ui';
-import Footer from '../../components/Footer';
 
 import './index.less';
 
@@ -11,16 +10,21 @@ const Login: React.FC = () => {
     Toast.info('表单已提交');
   };
 
-  const syncValidate = (values: { name: number; password: string }) => {
+  const syncValidate = (values: { name: number; password: number }) => {
     const errors = { name: '', password: '' };
-    if (values.name === undefined) {
+    if (values.name === undefined && values.password === undefined) {
       errors.name = '清输入用户名';
+      errors.password = '请输入密码';
+      return errors;
+    }
+    if (values.name === undefined) {
+      errors.name = '请输用户名';
+      return errors;
     }
     if (values.password === undefined) {
       errors.password = '请输入密码';
+      return errors;
     }
-
-    return errors;
   };
 
   return (
@@ -55,7 +59,7 @@ const Login: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Button disabled={values.agree} htmlType="submit" type="tertiary">
+              <Button type="primary" htmlType="submit">
                 Log in
               </Button>
             </div>

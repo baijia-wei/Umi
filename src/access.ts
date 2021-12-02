@@ -5,8 +5,8 @@
 export default function access(initialState: any) {
   const { isAdmin, hasRoutes = [] } = initialState;
   return {
-    adminRouteFilter: () => true, // 只有管理员可访问
     normalRouteFilter: (route: any) => {
+      // route路由 遍历传来的数组权限 来匹配路由
       return hasRoutes.includes(route.name);
     },
   };

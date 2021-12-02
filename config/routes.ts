@@ -1,6 +1,7 @@
 export default [
   {
     path: '/',
+    layout: false, //隐藏侧边栏
     component: '@/pages/index',
   },
   // 图标

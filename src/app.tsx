@@ -2,6 +2,7 @@ import { PageLoading } from '@ant-design/pro-layout';
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { Spin } from 'antd';
 import { RunTimeLayoutConfig } from 'umi';
+import RightContent from './components/RightContent';
 export async function getInitialState(): Promise<any> {
   const fetchUserInfo = async () => {};
   return {
@@ -14,8 +15,11 @@ export const initialStateConfig = {
 };
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
+// layout导航栏配置
 export const layout: RunTimeLayoutConfig = () => {
   return {
+    rightContentRender: () => <RightContent />,
+    // 水印配置
     waterMarkProps: {
       content: '家玮',
     },

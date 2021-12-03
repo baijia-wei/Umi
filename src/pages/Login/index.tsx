@@ -1,13 +1,13 @@
 import { Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Form, Toast, Button } from '@douyinfe/semi-ui';
-
+import { history } from 'umi';
 import './index.less';
 
 const Login: React.FC = () => {
   const handleSubmit = (values: any) => {
-    console.log(values);
-    Toast.info('表单已提交');
+    Toast.info('登录成功');
+    history.push('/');
   };
 
   const syncValidate = (values: { name: number; password: number }) => {
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container loginback">
       <Form
         validateFields={syncValidate as any}
         onSubmit={handleSubmit}

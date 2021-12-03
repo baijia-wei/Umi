@@ -1,10 +1,13 @@
 import { getgetVerifyCode } from '@/services/homeApi/api';
-import { GridContent } from '@ant-design/pro-layout';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Suspense, useEffect, useState } from 'react';
-import styles from '../style.less';
+
 import { Col, Card, Row } from '@douyinfe/semi-ui';
 import { Line } from '@ant-design/charts';
 import { Column } from '@ant-design/charts';
+
+import PageLoading from '@/components/PageLoading/index';
+
 const asdadw = () => {
   const dataswk = [
     { year: '1990', value: 3 },
@@ -47,15 +50,12 @@ const asdadw = () => {
   };
 
   return (
-    <div>
+    <PageContainer content="数据可视化">
       <GridContent>
         <>
+          <Suspense fallback={<PageLoading />}></Suspense>
           <Suspense fallback={null}>
-            <Card
-              className={styles.offlineCard}
-              bordered={false}
-              style={{ marginTop: 32 }}
-            >
+            <Card bordered={false}>
               <div>
                 <Line
                   height={400}
@@ -68,9 +68,8 @@ const asdadw = () => {
           </Suspense>
 
           <Row
-            gutter={24}
             style={{
-              marginTop: 24,
+              margin: 24,
             }}
           >
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
@@ -82,11 +81,7 @@ const asdadw = () => {
           </Row>
 
           <Suspense fallback={null}>
-            <Card
-              className={styles.offlineCard}
-              bordered={false}
-              style={{ marginTop: 32 }}
-            >
+            <Card>
               <div>
                 <Column {...(config as any)} />
               </div>
@@ -97,7 +92,7 @@ const asdadw = () => {
           <Suspense fallback={null}></Suspense>
         </>
       </GridContent>
-    </div>
+    </PageContainer>
   );
 };
 

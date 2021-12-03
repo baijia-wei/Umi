@@ -1,7 +1,13 @@
 export default [
   {
-    path: '/',
+    path: '/Login/index',
     layout: false, //隐藏侧边栏
+    component: '@/pages/Login/index',
+  },
+
+  {
+    path: '/index',
+    // layout: false, //隐藏侧边栏
     component: '@/pages/index',
   },
   // 图标
@@ -43,6 +49,7 @@ export default [
     access: 'normalRouteFilter',
     name: '列表页面',
     icon: 'smile',
+
     routes: [
       {
         path: '/list/table-list',

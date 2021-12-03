@@ -1,4 +1,5 @@
 import { getgetVerifyCode } from '@/services/homeApi/api';
+import { PageContainer } from '@ant-design/pro-layout';
 import { useState } from 'react';
 import { useRequest } from 'umi';
 
@@ -8,10 +9,12 @@ const User = () => {
     return getgetVerifyCode();
   });
   return (
-    <div>
-      <img src={data?.captcha} alt="load" />
-      你好aaaaaaaaaaaaaaaaa
-    </div>
+    <PageContainer content="用户权限">
+      <div>
+        <img src={data?.captcha} alt="load" />
+        你aaaaaa
+      </div>
+    </PageContainer>
   );
 };
 

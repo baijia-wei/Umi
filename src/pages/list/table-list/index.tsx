@@ -1,8 +1,16 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import styles from '../style.less';
-import { Table, Avatar, Descriptions, Tag, Card } from '@douyinfe/semi-ui';
-import { IconMore } from '@douyinfe/semi-icons';
-import { GridContent } from '@ant-design/pro-layout';
+// import  '';
+import {
+  Table,
+  Avatar,
+  Descriptions,
+  Tag,
+  Card,
+  Form,
+  Button,
+} from '@douyinfe/semi-ui';
+import './index.less';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import * as dateFns from 'date-fns';
 const TableList = () => {
   const [dataSource, setData] = useState([]);
@@ -140,11 +148,51 @@ const TableList = () => {
     return data;
   };
 
+  const handleSubmit = () => {};
+
   return (
-    <GridContent>
-      <Suspense fallback={null}>
-        <Card className="offlineCard">
-          <div>
+    <PageContainer content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。">
+      <GridContent>
+        <Suspense fallback={null}>
+          <Card className="offlineCards">
+            <Form layout="horizontal" onSubmit={handleSubmit}>
+              <Form.Input
+                placeholder="标题"
+                noLabel={true}
+                field="title"
+              ></Form.Input>
+              <Form.Input
+                placeholder="大小"
+                noLabel={true}
+                field="szei"
+              ></Form.Input>
+              <Form.Input
+                placeholder="所有者"
+                noLabel={true}
+                field="all"
+              ></Form.Input>
+              <Form.Input
+                placeholder="更新日期"
+                noLabel={true}
+                field="date"
+              ></Form.Input>
+              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginRight: '10px' }}
+                  className="btn-margin-right"
+                >
+                  搜索
+                </Button>
+                <Button htmlType="reset">清空</Button>
+              </div>
+            </Form>
+          </Card>
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <Card className="offlineCards">
             <Table
               scroll={scroll}
               rowKey="name"
@@ -154,10 +202,10 @@ const TableList = () => {
               hideExpandedColumn={false}
               rowSelection={rowSelection}
             />
-          </div>
-        </Card>
-      </Suspense>
-    </GridContent>
+          </Card>
+        </Suspense>
+      </GridContent>
+    </PageContainer>
   );
 };
 

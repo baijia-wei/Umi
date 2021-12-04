@@ -12,7 +12,7 @@ import styles from './index.less';
 
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import { useState } from '@umijs/renderer-react/node_modules/@types/react';
-
+import imgsyyy from '../../assets/static/11111.jpg';
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -82,20 +82,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const onMenuClick = () => {};
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-      {menu && (
-        <Menu.Item key="center">
-          <UserOutlined />
-          个人中心
-        </Menu.Item>
-      )}
-      {menu && (
-        <Menu.Item key="settings">
-          <SettingOutlined />
-          个人设置
-        </Menu.Item>
-      )}
-      {menu && <Menu.Divider />}
-
       <Menu.Item key="logout">
         <LogoutOutlined />
         退出登录
@@ -106,7 +92,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />  */}
-        <Avatar size="small" className={styles.avatar} alt="avatar" />
+        <Avatar
+          size="small"
+          className={styles.avatar}
+          src={imgsyyy}
+          alt="avatar"
+        />
         {/* <span className={`${styles.name} anticon`}>{currentUser.name}</span> */}
         <span className={`${styles.name} anticon`}>嘤嘤嘤</span>
       </span>

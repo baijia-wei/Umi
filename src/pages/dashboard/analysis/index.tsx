@@ -2,11 +2,12 @@ import { getgetVerifyCode } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Suspense, useEffect, useState } from 'react';
 
-import { Col, Card, Row } from '@douyinfe/semi-ui';
-import { Line } from '@ant-design/charts';
+import { Col, Card, Row, Progress } from '@douyinfe/semi-ui';
+import { DualAxes, Line, Liquid, Pie } from '@ant-design/charts';
 import { Column } from '@ant-design/charts';
-
+import './index.less';
 import PageLoading from '@/components/PageLoading/index';
+import configsw, { configxxxx } from './data';
 
 const asdadw = () => {
   const dataswk = [
@@ -49,44 +50,79 @@ const asdadw = () => {
     },
   };
 
+  const configdwx = {
+    percent: 0.25,
+    outline: {
+      border: 4,
+      distance: 8,
+    },
+    wave: {
+      length: 128,
+    },
+  };
+
   return (
     <PageContainer content="数据可视化">
       <GridContent>
         <>
           <Suspense fallback={<PageLoading />}></Suspense>
+
           <Suspense fallback={null}>
-            <Card bordered={false}>
-              <div>
-                <Line
-                  height={400}
-                  data={dataswk}
-                  xField="year"
-                  yField="value"
-                />
-              </div>
-            </Card>
+            <Row
+              style={{
+                marginTop: 24,
+              }}
+            >
+              <Col span={12}>
+                <Suspense fallback={null}>
+                  <Card>
+                    <Column {...(config as any)} height={420} />
+                  </Card>
+                </Suspense>
+              </Col>
+              <Col span={6}>
+                <Suspense fallback={null}>
+                  <Card>
+                    <div>收入情况 ￥100000（万）</div>
+                    <Pie {...configsw} />
+                  </Card>
+                </Suspense>
+              </Col>
+              <Col span={6}>
+                <Suspense fallback={null}>
+                  <Card>
+                    <div>收入情况 ￥100000（万）</div>
+                    <br />
+                    手续费
+                    <Progress percent={10} stroke="#fc8800" showInfo={true} />
+                    <br />
+                    充值
+                    <Progress percent={25} stroke="#f93920" showInfo={true} />
+                  </Card>
+                  <Card>
+                    服务器资源
+                    <Liquid {...configdwx} height={234} />
+                  </Card>
+                </Suspense>
+              </Col>
+            </Row>
           </Suspense>
 
           <Row
             style={{
-              margin: 24,
+              marginTop: 24,
             }}
           >
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <Suspense fallback={null}>adas</Suspense>
-            </Col>
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <Suspense fallback={null}>asdas</Suspense>
+            <Col span={24}>
+              <Suspense fallback={null}>
+                <Card>
+                  <DualAxes {...configxxxx} />
+                </Card>
+              </Suspense>
             </Col>
           </Row>
 
-          <Suspense fallback={null}>
-            <Card>
-              <div>
-                <Column {...(config as any)} />
-              </div>
-            </Card>
-          </Suspense>
+          <Suspense fallback={null}></Suspense>
 
           {/* 折线表 */}
           <Suspense fallback={null}></Suspense>

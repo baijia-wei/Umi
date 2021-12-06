@@ -4,10 +4,13 @@ const Settings: LayoutSettings & {
   pwa?: boolean;
   logo?: string;
 } = {
-  navTheme: 'light',
+  // 主题
 
-  primaryColor: '#1890ff',
-  layout: 'mix',
+  navTheme: 'light',
+  primaryColor: '#722ED1',
+  // 布局类型 side | top
+  layout: 'side',
+  // 内容模式
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,

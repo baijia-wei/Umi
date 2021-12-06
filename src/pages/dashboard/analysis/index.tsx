@@ -62,7 +62,7 @@ const asdadw = () => {
   };
 
   return (
-    <PageContainer content="数据可视化">
+    <PageContainer content="今日数据">
       <GridContent>
         <>
           <Suspense fallback={<PageLoading />}></Suspense>

@@ -1,4 +1,3 @@
-import { getgetVerifyCode } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -100,7 +99,7 @@ const asdadw = () => {
                     <Progress percent={25} stroke="#f93920" showInfo={true} />
                   </Card>
                   <Card>
-                    服务器资源
+                    奖金池资源
                     <Liquid {...configdwx} height={234} />
                   </Card>
                 </Suspense>

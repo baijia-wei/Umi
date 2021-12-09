@@ -17,7 +17,7 @@ export default defineConfig({
     '@primary-color': '#722ED1',
   },
 
-  title: false,
+  // title: false,
 
   // 布局配置
   layout: {

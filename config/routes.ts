@@ -22,6 +22,11 @@ export default [
         path: '/dashboard/analysis',
         component: '@/pages/dashboard/analysis/index',
       },
+      {
+        name: '详情结构',
+        path: '/dashboard/descriptons',
+        component: '@/pages/dashboard/descriptions/index',
+      },
     ],
   },
 

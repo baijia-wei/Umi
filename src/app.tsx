@@ -20,6 +20,8 @@ export const initialStateConfig = {
 // layout导航栏配置
 export const layout: RunTimeLayoutConfig = () => {
   return {
+    // 点击不会回收菜单栏
+    openKeys: false,
     // 顶部头栏配置
     rightContentRender: () => <RightContent />,
     // 水印配置

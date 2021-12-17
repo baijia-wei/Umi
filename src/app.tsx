@@ -9,8 +9,6 @@ import { history, Link } from 'umi';
 import { getCookie } from './utils/cookie/getcookl';
 const list = getCookie('toke');
 
-// isAdmin: 'admin',
-// hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
 export async function getInitialState(): Promise<any> {
   // 判断是否登录
   if (!list) {
@@ -31,12 +29,12 @@ export async function getInitialState(): Promise<any> {
     fetchUserInfo,
   };
 }
+
 // js 加载loging
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
 // layout导航栏配置
 export const layout: RunTimeLayoutConfig = () => {
   return {

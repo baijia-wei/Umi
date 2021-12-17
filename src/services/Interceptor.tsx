@@ -12,6 +12,7 @@ interface error {
     url: string;
   };
 }
+
 const codeMessage: Record<number, string> = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -44,7 +45,7 @@ const demoResponseInterceptors = (
   response: Response,
   options: RequestOptionsInit,
 ) => {
-  response.headers.append('interceptors', 'yes yo');
+  response.headers.append('interceptors', 'yes');
   return response;
 };
 //错误处理
@@ -66,7 +67,7 @@ const errorHandler = (error: error) => {
 };
 
 export const request = extend({
-  // prefix: 'http://13.245.39.119:2018',
+  prefix: 'http://192.168.2.146:7030',
   timeout: 1000,
   errorHandler, //错误处理
   requestInterceptors: [authHeaderInterceptor],

@@ -16,6 +16,8 @@ export default [
     name: '图表页面',
     access: 'normalRouteFilter',
     icon: 'smile',
+    apiRoutes: ['1111111'],
+
     routes: [
       {
         name: '分析页面',

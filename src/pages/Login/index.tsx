@@ -6,7 +6,6 @@ import './index.less';
 
 const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-
   const handleSubmit = (values: any) => {
     document.cookie = 'toke=' + 'xxxxxx';
     // 设置用户信息 权限
@@ -18,7 +17,7 @@ const Login: React.FC = () => {
     history.push('/');
   };
 
-  const syncValidate = (values: { name: number; password: number }) => {
+  const syncValidate = (values: { name: number; password: string }) => {
     const errors = { name: '', password: '' };
     if (values.name === undefined && values.password === undefined) {
       errors.name = '清输入用户名';
@@ -40,7 +39,7 @@ const Login: React.FC = () => {
       <Form
         validateFields={syncValidate as any}
         onSubmit={handleSubmit}
-        style={{ width: 400 }}
+        style={{ width: 300, marginTop: -300 }}
       >
         {({ formState, values, formApi }) => (
           <>

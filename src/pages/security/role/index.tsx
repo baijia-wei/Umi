@@ -16,7 +16,11 @@ import * as dateFns from 'date-fns';
 import { IconPlus } from '@douyinfe/semi-icons';
 import Table from '@douyinfe/semi-ui/lib/es/table/Table';
 import treeData from './data';
+
+import ccc from '../../../../config/routes';
 const Role = () => {
+  console.log(ccc);
+
   const [visible, setvisible] = useState(false);
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();

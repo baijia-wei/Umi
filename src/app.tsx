@@ -4,11 +4,31 @@ import { Spin } from 'antd';
 import { RunTimeLayoutConfig } from 'umi';
 import RightContent from './components/RightContent';
 // 全局数据初始化
+
+import { history, Link } from 'umi';
+import { getCookie } from './utils/cookie/getcookl';
+const list = getCookie('toke');
+
+// isAdmin: 'admin',
+// hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
 export async function getInitialState(): Promise<any> {
-  const fetchUserInfo = async () => {};
+  // 判断是否登录
+  if (!list) {
+    history.push('/Login/index');
+  }
+  const fetchUserInfo = async (res: any) => {
+    return res;
+  };
+  // 如果是登录页面，不执行
+  if (history.location.pathname !== '/Login/index') {
+    return {
+      isAdmin: '',
+      hasRoutes: [],
+    };
+  }
+
   return {
-    isAdmin: 'admin',
-    hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+    fetchUserInfo,
   };
 }
 // js 加载loging

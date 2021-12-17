@@ -1,11 +1,19 @@
 import { Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Form, Toast, Button } from '@douyinfe/semi-ui';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import './index.less';
 
 const Login: React.FC = () => {
+  const { initialState, setInitialState } = useModel('@@initialState');
+
   const handleSubmit = (values: any) => {
+    document.cookie = 'toke=' + 'xxxxxx';
+    // 设置用户信息 权限
+    setInitialState({
+      isAdmin: 'admin',
+      hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+    });
     Toast.info('登录成功');
     history.push('/');
   };

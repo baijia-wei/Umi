@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
+import { history } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
@@ -13,6 +13,8 @@ import styles from './index.less';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import { useState } from '@umijs/renderer-react/node_modules/@types/react';
 import imgsyyy from '../../assets/static/11111.jpg';
+import { clearAllCookie } from '@/utils/cookie/cookie';
+import { Toast } from '@douyinfe/semi-ui';
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -79,7 +81,13 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   //     return loading;
   //   }
 
-  const onMenuClick = () => {};
+  const onMenuClick = () => {
+    clearAllCookie();
+    Toast.info('退出成功');
+
+    location.replace('/Login/index');
+    // history.push("/Login/index");
+  };
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       <Menu.Item key="logout">

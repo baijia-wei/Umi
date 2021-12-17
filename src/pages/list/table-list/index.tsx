@@ -8,11 +8,14 @@ import {
   Card,
   Form,
   Button,
+  Modal,
 } from '@douyinfe/semi-ui';
 import './index.less';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import * as dateFns from 'date-fns';
 const TableList = () => {
+  const [visible, setvisible] = useState(false);
+
   const [dataSource, setData] = useState([]);
   const figmaIconUrl =
     'https://lf3-static.bytednsdoc.com/obj/eden-cn/ptlz_zlp/ljhwZthlaukjlkulzlp/figma-icon.png';
@@ -107,7 +110,42 @@ const TableList = () => {
         return dateFns.format(new Date(value), 'yyyy-MM-dd');
       },
     },
+
+    {
+      title: '操作',
+      dataIndex: 'size',
+      sorter: (a: { size: number }, b: { size: number }) =>
+        a.size - b.size > 0 ? 1 : -1,
+      render: (text: any) => {
+        return (
+          <div>
+            <Button
+              onClick={showDialog}
+              style={{ marginRight: 8, color: 'rgb(104, 0, 240)' }}
+            >
+              编辑弹窗
+            </Button>
+          </div>
+        );
+      },
+    },
   ];
+
+  // 权限分配弹窗
+  const showDialog = () => {
+    setvisible(true);
+  };
+  // 权限分配弹窗ok确认
+  const handleOk = () => {
+    console.log(' console.log(valuedx);');
+    console.log();
+
+    setvisible(false);
+  };
+  // 权限分配弹窗取消
+  const handleCancel = () => {
+    setvisible(false);
+  };
   const rowSelection = useMemo(
     () => ({
       onChange: (selectedRowKeys: any, selectedRows: any) => {
@@ -205,6 +243,12 @@ const TableList = () => {
           </Card>
         </Suspense>
       </GridContent>
+      <Modal
+        title="基本对话框"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      ></Modal>
     </PageContainer>
   );
 };

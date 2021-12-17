@@ -1,4 +1,4 @@
-import { getgetVerifyCode, getNotices } from '@/services/homeApi/api';
+// import { getgetVerifyCode, getNotices } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Modal, Tree } from '@douyinfe/semi-ui';
 import { Card } from 'antd';
@@ -92,10 +92,11 @@ const Role = () => {
 
   const scroll = useMemo(() => ({ y: 400 }), []);
 
-  // 权限分配打开方法
+  // 权限分配弹窗
   const showDialog = () => {
     setvisible(true);
   };
+
   // 权限分配弹窗ok确认
   const handleOk = () => {
     console.log(valuedx, ' console.log(valuedx);');

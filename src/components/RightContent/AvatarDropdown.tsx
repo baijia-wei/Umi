@@ -13,8 +13,9 @@ import styles from './index.less';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import { useState } from '@umijs/renderer-react/node_modules/@types/react';
 import imgsyyy from '../../assets/static/11111.jpg';
-import { clearAllCookie } from '@/utils/cookie/cookie';
+
 import { Toast } from '@douyinfe/semi-ui';
+import { removeToken } from '@/utils/cookie/auth';
 export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
@@ -82,7 +83,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   //   }
 
   const onMenuClick = () => {
-    clearAllCookie();
+    removeToken();
     Toast.info('退出成功');
 
     location.replace('/Login/index');

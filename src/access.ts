@@ -1,10 +1,8 @@
-export default function access(initialState: any) {
-  const { hasRoutes = [] } = initialState;
+export default function access(initialState: { settings: any }) {
+  const { hasRoutes = [] } = initialState?.settings;
 
   return {
     normalRouteFilter: (route: any) => {
-      console.log(route);
-
       // route路由 遍历传来的数组权限 来匹配路由
       return hasRoutes.includes(route.name);
     },

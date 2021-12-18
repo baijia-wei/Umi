@@ -1,17 +1,17 @@
 const treeData = [
   {
     label: '用户管理',
-    value: 'Asia',
+    value: '用户管理',
     key: '0',
     children: [
       {
         label: '角色权限',
-        value: 'China',
+        value: '角色权限',
         key: '0-0',
         children: [
           {
             label: '家玮',
-            value: 'Beijing',
+            value: '家玮',
             key: '0-0-0',
           },
           {
@@ -28,12 +28,12 @@ const treeData = [
       },
       {
         label: '用户管理',
-        value: 'Japan',
+        value: '用户管理',
         key: '0-1',
         children: [
           {
             label: '家玮2',
-            value: 'Osaka',
+            value: '家玮2',
             key: '0-1-0',
           },
         ],

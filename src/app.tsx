@@ -6,27 +6,44 @@ import RightContent from './components/RightContent';
 // 全局数据初始化
 
 import { history, Link } from 'umi';
-import { getCookie } from './utils/cookie/getcookl';
-const list = getCookie('toke');
+import { getToken } from './utils/cookie/auth';
+import { getUserInfo } from './services/homeApi/api';
 
 export async function getInitialState(): Promise<any> {
   // 判断是否登录
-  if (!list) {
+  if (!getToken()) {
     history.push('/Login/index');
   }
-  const fetchUserInfo = async (res: any) => {
-    return res;
+
+  const fetchUserInfo = async () => {
+    try {
+      // 获取用户权限
+      const msg = await getUserInfo();
+      return {
+        isAdmin: 'admin',
+        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+      };
+    } catch (error) {
+      history.push('/Login/index');
+    }
+    return undefined;
   };
-  // 如果是登录页面，不执行
+
+  // 如果不是登录页面  每次刷新调用用户权限
   if (history.location.pathname !== '/Login/index') {
+    const currentUser = await fetchUserInfo();
+
     return {
-      isAdmin: '',
-      hasRoutes: [],
+      settings: {
+        isAdmin: 'admin',
+        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+      },
     };
   }
 
   return {
     fetchUserInfo,
+    settings: [],
   };
 }
 

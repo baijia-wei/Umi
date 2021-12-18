@@ -6,6 +6,7 @@ import {
   ReactChild,
   ReactFragment,
   ReactPortal,
+  SetStateAction,
   Suspense,
   useEffect,
   useMemo,
@@ -15,20 +16,24 @@ import { useRequest } from 'umi';
 import * as dateFns from 'date-fns';
 import { IconPlus } from '@douyinfe/semi-icons';
 import Table from '@douyinfe/semi-ui/lib/es/table/Table';
-import treeData from './data';
 
 import ccc from '../../../../config/routes';
+import { PrmRoleList, PrmRoleResource } from '@/services/homeApi/api';
 const Role = () => {
-  console.log(ccc);
+  const [parameter, setparameter] = useState<any>({
+    page: 1,
+    size: 15,
+  });
 
   const [visible, setvisible] = useState(false);
+  const [valueterr, setvalueterr] = useState([]);
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
 
   const columns = [
     {
       title: '角色名称',
-      dataIndex: 'name',
+      dataIndex: 'roleName',
       render: (
         text:
           | boolean
@@ -43,7 +48,7 @@ const Role = () => {
     },
     {
       title: '描述',
-      dataIndex: 'owner',
+      dataIndex: 'description',
       render: (text: any, record: any) => {
         return <div>{text}</div>;
       },
@@ -54,11 +59,13 @@ const Role = () => {
       dataIndex: 'size',
       sorter: (a: { size: number }, b: { size: number }) =>
         a.size - b.size > 0 ? 1 : -1,
-      render: (text: any) => {
+      render: (text: string, record: any) => {
         return (
           <div>
             <Button
-              onClick={showDialog}
+              onClick={() => {
+                showDialog(record.id);
+              }}
               style={{ marginRight: 8, color: 'rgb(104, 0, 240)' }}
             >
               分配权限
@@ -76,34 +83,74 @@ const Role = () => {
   ];
 
   const getData = () => {
-    const data = [];
-    for (let i = 0; i < 46; i++) {
-      const isSemiDesign = i % 2 === 0;
-
-      data.push({
-        key: '' + i,
-        name: isSemiDesign ? `家玮${i}.fig` : `催收主管${i}.fig`,
-        owner: isSemiDesign ? '个人专属' : '运营人员',
-      });
-    }
-    return data;
+    PrmRoleList(parameter).then((res) => {
+      setData(res.data.record);
+    });
   };
-
   useEffect(() => {
-    const data = getData();
-    setData(data);
+    setvalue(xxxx(ccc));
+    getData();
   }, []);
 
   const scroll = useMemo(() => ({ y: 400 }), []);
 
+  const xxxx = (routes: any) => {
+    return routes
+      .filter((item: any) => {
+        return item.name !== undefined || item.code !== undefined;
+      })
+      .map((item: any, index: any) => {
+        return {
+          label: item.name,
+          value: item.name,
+          url: item.path,
+          name: item.name,
+          code: item.code,
+          key: item.key,
+          apiRoutes: item.apiRoutes,
+          children: xxxx(item.routes || []),
+        };
+      });
+  };
+
+  function getSome(arr1: any, arr2: any) {
+    let newArr = [];
+    for (let i = 0; i < arr2.length; i++) {
+      for (let j = 0; j < arr1.length; j++) {
+        if (arr1[j].code === arr2[i].code) {
+          newArr.push(arr1[j]);
+        }
+      }
+    }
+    return newArr;
+  }
+
   // 权限分配弹窗
-  const showDialog = () => {
+  const showDialog = async (id: string | number) => {
+    const lonxxw = [
+      {
+        code: 'bd388aad09f9',
+        name: '图表页面',
+        url: '/dashboard',
+      },
+    ];
+
+    const dwzx: any[] = getSome(valuedx, lonxxw);
+
+    // const lonx = await PrmRoleResource({ roleId: id, type: 20 })
+
+    console.log();
+
+    setvalue(dwzx as any);
+
+    console.log(dwzx);
+
     setvisible(true);
   };
 
   // 权限分配弹窗ok确认
   const handleOk = () => {
-    console.log(valuedx, ' console.log(valuedx);');
+    console.log(valueterr, ' console.log(valuedx);');
     console.log();
 
     setvisible(false);
@@ -118,8 +165,8 @@ const Role = () => {
     height: 420,
   };
 
-  const onChange = (value: React.Key[]) => {
-    setvalue(value);
+  const onChange = (value: SetStateAction<never[]>) => {
+    setvalueterr(value);
   };
 
   return (
@@ -149,16 +196,16 @@ const Role = () => {
         </Suspense>
       </GridContent>
       <Modal
-        title="基本对话框"
+        title="分配权限"
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Tree
-          treeData={treeData}
+          treeData={valuedx}
           multiple
           onChange={onChange as any}
-          value={valuedx}
+          value={valueterr}
           defaultExpandAll
           style={style}
         />

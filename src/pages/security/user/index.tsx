@@ -1,4 +1,4 @@
-import { getgetVerifyCode, getNotices } from '@/services/homeApi/api';
+import { PrmUserList } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Form, Switch } from '@douyinfe/semi-ui';
 import { Card } from 'antd';
@@ -17,11 +17,16 @@ import { IconPlus } from '@douyinfe/semi-icons';
 import Table from '@douyinfe/semi-ui/lib/es/table/Table';
 import { Modal } from '@douyinfe/semi-ui';
 const Role = () => {
+  const [parameter, setparameter] = useState<any>({
+    page: 1,
+    size: 15,
+  });
+  const [visible, setvisible] = useState(false);
   const [dataSource, setData] = useState<any>();
   const columns = [
     {
       title: '登录账户',
-      dataIndex: 'account',
+      dataIndex: 'fullName',
       render: (
         text:
           | boolean
@@ -36,7 +41,7 @@ const Role = () => {
     },
     {
       title: '姓名',
-      dataIndex: 'name',
+      dataIndex: 'userName',
       render: (text: any, record: any) => {
         return <div>{text}</div>;
       },
@@ -44,18 +49,18 @@ const Role = () => {
 
     {
       title: '禁用',
-
-      render: (text: any, record: any) => {
+      dataIndex: 'isDisabled',
+      render: (text: any) => {
         return (
           <div>
-            <Switch defaultChecked={true}></Switch>
+            <Switch defaultChecked={text}></Switch>
           </div>
         );
       },
     },
     {
       title: '角色',
-      dataIndex: 'owner',
+      dataIndex: 'roleList',
       render: (text: any, record: any) => {
         return <div>{text}</div>;
       },
@@ -82,29 +87,31 @@ const Role = () => {
   ];
 
   const getData = () => {
-    const data = [];
-    for (let i = 0; i < 46; i++) {
-      const isSemiDesign = i % 2 === 0;
-
-      data.push({
-        key: '' + i,
-        account: isSemiDesign ? `家玮${i}.fig` : `催收主管${i}.fig`,
-        name: 'noodles',
-        owner: isSemiDesign ? '个人专属' : '运营人员',
-      });
-    }
-    return data;
+    PrmUserList(parameter).then((res) => {
+      console.log(res);
+      setData(res.data.record);
+    });
   };
 
   useEffect(() => {
     const data = getData();
-    setData(data);
   }, []);
 
   const scroll = useMemo(() => ({ y: 400 }), []);
 
   // 搜索表单
   const handleSubmit = (value: any) => {};
+  // 权限分配弹窗
+  const showDialog = () => {};
+
+  // 权限分配弹窗ok确认
+  const handleOk = () => {
+    setvisible(false);
+  };
+  // 权限分配弹窗取消
+  const handleCancel = () => {
+    setvisible(false);
+  };
 
   return (
     <PageContainer content="角色权限">
@@ -113,24 +120,19 @@ const Role = () => {
           <Card>
             <Form layout="horizontal" onSubmit={handleSubmit}>
               <Form.Input
-                placeholder="标题"
+                placeholder="登录账号"
                 noLabel={true}
                 field="title"
               ></Form.Input>
               <Form.Input
-                placeholder="大小"
+                placeholder="姓名"
                 noLabel={true}
                 field="szei"
               ></Form.Input>
               <Form.Input
-                placeholder="所有者"
+                placeholder="是否禁用"
                 noLabel={true}
                 field="all"
-              ></Form.Input>
-              <Form.Input
-                placeholder="更新日期"
-                noLabel={true}
-                field="date"
               ></Form.Input>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                 <Button
@@ -169,6 +171,17 @@ const Role = () => {
           </Card>
         </Suspense>
       </GridContent>
+
+      <Modal
+        title="基本对话框"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        This is the content of a basic modal.
+        <br />
+        More content...
+      </Modal>
     </PageContainer>
   );
 };

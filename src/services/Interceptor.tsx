@@ -2,6 +2,7 @@ import { RequestConfig } from 'umi';
 import { extend } from 'umi-request';
 import type { RequestOptionsInit } from 'umi-request';
 import { notification } from 'antd';
+import { getToken } from '@/utils/cookie/auth';
 interface error {
   name: string;
   data: any;
@@ -33,10 +34,9 @@ const codeMessage: Record<number, string> = {
 
 // 请求前拦截：requestInterceptors
 const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
-  const authHeader = { Authorization: 'Bearer ' };
   return {
     url: `${url}`,
-    options: { ...options, interceptors: true, headers: authHeader },
+    options: { ...options, interceptors: true },
   };
 };
 
@@ -50,6 +50,8 @@ const demoResponseInterceptors = (
 };
 //错误处理
 const errorHandler = (error: error) => {
+  console.log(error);
+
   if (error.name === 'BizError') {
     notification.error({
       message: `请求错误 ${error.data.code}`,
@@ -57,18 +59,18 @@ const errorHandler = (error: error) => {
     });
     return error.data.code;
   }
-  const { response } = error;
-  const errortext = codeMessage[response.status] || response.statusText;
-  const { status, url } = response;
-  notification.error({
-    message: `请求错误 ${status}: ${url}`,
-    description: errortext,
-  });
+  // notification.error({
+  //   message: `请求错误 服务器错误`,
+
+  // });
 };
 
 export const request = extend({
   prefix: 'http://192.168.2.146:7030',
   timeout: 1000,
+  headers: {
+    Authorization: 'Bearer ' + (getToken() === undefined ? '' : getToken()),
+  },
   errorHandler, //错误处理
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],

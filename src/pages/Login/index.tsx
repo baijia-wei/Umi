@@ -1,35 +1,91 @@
-import { Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Form, Toast, Button } from '@douyinfe/semi-ui';
-import { history, useModel } from 'umi';
+import { history, useModel, useRequest } from 'umi';
 import './index.less';
 
-const Login: React.FC = () => {
+import { login, verifyCodes } from '@/services/homeApi/api';
+import { setToken } from '@/utils/cookie/auth';
+const Login: React.FunctionComponent = () => {
+  // 图片
+  const [img, steimg] = useState('');
+  const [verifyKey, stecode] = useState('');
   const { initialState, setInitialState } = useModel('@@initialState');
-  const handleSubmit = (values: any) => {
-    document.cookie = 'toke=' + 'xxxxxx';
-    // 设置用户信息 权限
+
+  // 处理用户权限
+  const fetchUserInfo = async () => {
+    const userInfo = await initialState?.fetchUserInfo?.();
+    console.log(userInfo);
+
     setInitialState({
-      isAdmin: 'admin',
-      hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+      settings: {
+        isAdmin: 'admin',
+        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+      },
     });
-    Toast.info('登录成功');
-    history.push('/');
+
+    if (userInfo) {
+      // 设置
+    }
+  };
+  // 登录
+  const handleSubmit = async (values: API.LoginParams) => {
+    values.verifyKey = verifyKey;
+    console.log(values);
+    try {
+      // 登录
+      const msg = await login(values);
+      if (msg.status === 1) {
+        setToken(msg.data as string);
+        await fetchUserInfo();
+        /** 此方法会跳转到 redirect 参数所在的位置 */
+        history.push('/');
+      }
+    } catch (error) {
+      Toast.error('失败');
+    }
+
+    // 设置用户信息 权限
+    // setInitialState({
+    //   isAdmin: 'admin',
+    //   hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+    // });
+    // Toast.info('登录成功');
+    // history.push('/');
   };
 
-  const syncValidate = (values: { name: number; password: string }) => {
-    const errors = { name: '', password: '' };
-    if (values.name === undefined && values.password === undefined) {
-      errors.name = '清输入用户名';
+  //点击图片
+  const VerificationCodeexx = () => {
+    verifyCodes().then((res) => {
+      stecode(res.data.verify);
+      steimg(res.data.captcha);
+    });
+  };
+
+  const syncValidate = (values: {
+    username: undefined;
+    password: undefined;
+    verifyCode: undefined;
+  }) => {
+    const errors = { username: '', password: '', verifyCode: '' };
+    if (
+      (values.username === undefined && values.password === undefined) ||
+      values.verifyCode === undefined
+    ) {
+      errors.username = '清输入用户名';
       errors.password = '请输入密码';
+      errors.verifyCode = '请输入密码';
       return errors;
     }
-    if (values.name === undefined) {
-      errors.name = '请输用户名';
+    if (values.username === undefined) {
+      errors.username = '请输用户名';
       return errors;
     }
     if (values.password === undefined) {
       errors.password = '请输入密码';
+      return errors;
+    }
+    if (values.verifyCode === undefined) {
+      errors.verifyCode = '请输入验证码';
       return errors;
     }
   };
@@ -44,7 +100,7 @@ const Login: React.FC = () => {
         {({ formState, values, formApi }) => (
           <>
             <Form.Input
-              field="name"
+              field="username"
               trigger="blur"
               label="账户"
               style={{ width: '100%' }}
@@ -58,6 +114,19 @@ const Login: React.FC = () => {
               style={{ width: '100%' }}
               placeholder="Enter your password"
             ></Form.Input>
+            <Form.Input
+              field="verifyCode"
+              trigger="blur"
+              label="验证码"
+              style={{ width: '70%' }}
+              placeholder="Enter your password"
+            ></Form.Input>
+            {/* 验证码 */}
+            <div className="spansaxws" onClick={VerificationCodeexx}>
+              <span>
+                <img src={img} alt="load" />
+              </span>
+            </div>
 
             <div
               style={{

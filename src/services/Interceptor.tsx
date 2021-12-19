@@ -66,11 +66,20 @@ const errorHandler = (error: error) => {
 };
 
 export const request = extend({
-  prefix: 'http://192.168.2.146:7030',
+  prefix: 'http://3.109.168.230:7030',
   timeout: 1000,
   headers: {
     Authorization: 'Bearer ' + (getToken() === undefined ? '' : getToken()),
   },
+  errorHandler, //错误处理
+  requestInterceptors: [authHeaderInterceptor],
+  responseInterceptors: [demoResponseInterceptors],
+});
+
+export const requestverifyCode = extend({
+  prefix: 'http://3.109.168.230:7030',
+  timeout: 1000,
+
   errorHandler, //错误处理
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],

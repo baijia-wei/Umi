@@ -26,7 +26,7 @@ const Role = () => {
   });
 
   const [visible, setvisible] = useState(false);
-  const [valueterr, setvalueterr] = useState([]);
+  const [valueterr, setvalueterr] = useState<any>();
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
 
@@ -134,24 +134,68 @@ const Role = () => {
         url: '/dashboard',
       },
     ];
-
     const dwzx: any[] = getSome(valuedx, lonxxw);
+
+    console.log(dwzx, 'xxxx');
 
     // const lonx = await PrmRoleResource({ roleId: id, type: 20 })
 
-    console.log();
+    let xsxs = [];
 
-    setvalue(dwzx as any);
+    xsxs.push(lonxxw.map(({ name }) => name));
 
-    console.log(dwzx);
+    setvalueterr(xsxs);
+
+    console.log(valueterr);
 
     setvisible(true);
   };
 
+  function getSomex(arr2: any) {
+    const llll: any = [];
+
+    valuedx.map((item: any, index: string | number) => {
+      if (item.name === arr2) {
+        llll.push({
+          code: item.code,
+          name: item.name,
+          url: item.url,
+        });
+
+        item.children.map((item1: any) => {
+          llll.push({
+            code: item1.code,
+            name: item1.name,
+            url: item1.url,
+          });
+        });
+      }
+      item.children.map((item1: any) => {
+        if (item1.name === arr2) {
+          llll.push({
+            code: item1.code,
+            name: item1.name,
+            url: item1.url,
+          });
+        }
+      });
+    });
+
+    return llll;
+  }
+
   // 权限分配弹窗ok确认
   const handleOk = () => {
-    console.log(valueterr, ' console.log(valuedx);');
-    console.log();
+    const axooo: any = [];
+    valueterr.map((item: any, index: string | number) => {
+      if (typeof item === 'string') {
+        axooo.push(...getSomex(item));
+      } else {
+        axooo.push(...getSomex(item[index]));
+      }
+    });
+
+    console.log(getSomex('用户权限'));
 
     setvisible(false);
   };
@@ -205,7 +249,7 @@ const Role = () => {
           treeData={valuedx}
           multiple
           onChange={onChange as any}
-          value={valueterr}
+          defaultValue={valueterr}
           defaultExpandAll
           style={style}
         />

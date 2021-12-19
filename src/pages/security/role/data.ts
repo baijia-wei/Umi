@@ -58,4 +58,24 @@ const treeData = [
     ],
   },
 ];
+
+const aadw = ['运营报表', '每日数据', '家玮2'];
+
+// 两个数组匹配一下 我要得到
+
+const aadw写 = [
+  {
+    label: '每日数据',
+    value: 'United States',
+  },
+  {
+    label: '运营报表',
+    value: 'North America',
+  },
+  {
+    label: '"家玮2',
+    value: '"家玮2',
+  },
+];
+
 export default treeData;

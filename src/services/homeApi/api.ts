@@ -1,8 +1,8 @@
-import { request } from '../Interceptor';
+import { request, requestverifyCode } from '../Interceptor';
 
 /** 登录接口 POST /api/login/account */ //完成
 export async function login(data: { [key: string]: any }) {
-  return request<API.LoginResult>('/token/login', {
+  return requestverifyCode<API.LoginResult>('/token/login', {
     method: 'POST',
     data,
   });
@@ -18,15 +18,15 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 获取验证码 POST /token/verifyCode*/
 export async function verifyCodes() {
-  return request<Record<string, any>>('/token/verifyCode', {
-    method: 'get',
+  return requestverifyCode<Record<string, any>>('/token/verifyCode', {
+    method: 'GET',
   });
 }
 
 /** 获取用户权限 get /prm/getUserInfo*/
 export async function getUserInfo() {
   return request<Record<string, any>>('/prm/getUserInfo', {
-    method: 'get',
+    method: 'GET',
   });
 }
 
@@ -54,6 +54,14 @@ export async function PrmRoleResource(data: {
   return request<API.LoginResult>('/prm/role/resource', {
     method: 'get',
     params: data,
+  });
+}
+
+/** 提交用户资源 POST/prm/submitResource*/
+export async function PostSubmitResource(data?: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/submitResource', {
+    method: 'POST',
+    data,
   });
 }
 

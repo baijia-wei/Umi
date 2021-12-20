@@ -14,7 +14,7 @@ export default defineConfig({
 
   // 颜色
   theme: {
-    '@primary-color': '#722ED1',
+    '@primary-color': '#0094FF',
   },
 
   // title: false,

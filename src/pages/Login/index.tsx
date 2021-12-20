@@ -19,7 +19,7 @@ const Login: React.FunctionComponent = () => {
     setInitialState({
       settings: {
         isAdmin: 'admin',
-        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+        hasRoutes: ['用户管理', '图表页面', '列表页面', '客户管理'], //权限列表
       },
     });
 

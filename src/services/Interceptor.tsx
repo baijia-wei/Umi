@@ -66,7 +66,7 @@ const errorHandler = (error: error) => {
 };
 
 export const request = extend({
-  prefix: 'http://3.109.168.230:7030',
+  prefix: 'http://localhost:8080',
   timeout: 1000,
   headers: {
     Authorization: 'Bearer ' + (getToken() === undefined ? '' : getToken()),
@@ -77,7 +77,7 @@ export const request = extend({
 });
 
 export const requestverifyCode = extend({
-  prefix: 'http://3.109.168.230:7030',
+  prefix: 'http://localhost:8080',
   timeout: 1000,
 
   errorHandler, //错误处理

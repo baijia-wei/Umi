@@ -122,4 +122,14 @@ export default [
       },
     ],
   },
+  {
+    key: '6',
+    path: '/customer',
+    access: 'normalRouteFilter',
+    name: '客户管理',
+    code: '99d4313377d9',
+    icon: 'TeamOutlined',
+    component: '@/pages/customer',
+    apiRoutes: ['1fa6dcb1c095', '5cf7902ea562', 'a1e622a0edac', '6c3d550dca60'],
+  },
 ];

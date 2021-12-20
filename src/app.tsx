@@ -14,14 +14,16 @@ export async function getInitialState(): Promise<any> {
   if (!getToken()) {
     history.push('/Login/index');
   }
-
   const fetchUserInfo = async () => {
     try {
       // 获取用户权限
       const msg = await getUserInfo();
+
+      console.log(msg);
+
       return {
         isAdmin: 'admin',
-        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
+        hasRoutes: ['查询表格', '角色权限', '角色管理', '分析页面', '详情结构'], //权限列表
       };
     } catch (error) {
       history.push('/Login/index');
@@ -34,10 +36,7 @@ export async function getInitialState(): Promise<any> {
     const currentUser = await fetchUserInfo();
 
     return {
-      settings: {
-        isAdmin: 'admin',
-        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
-      },
+      settings: currentUser,
     };
   }
 

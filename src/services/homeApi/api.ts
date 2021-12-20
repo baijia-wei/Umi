@@ -1,8 +1,8 @@
-import { request } from '../Interceptor';
+import { request, requestLoging } from '../Interceptor';
 
 /** 登录接口 POST /api/login/account */ //完成
 export async function login(data: { [key: string]: any }) {
-  return request<API.LoginResult>('/token/login', {
+  return requestLoging<API.LoginResult>('/token/login', {
     method: 'POST',
     data,
   });
@@ -18,7 +18,7 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 获取验证码 POST /token/verifyCode*/
 export async function verifyCodes() {
-  return request<Record<string, any>>('/token/verifyCode', {
+  return requestLoging<Record<string, any>>('/token/verifyCode', {
     method: 'get',
   });
 }
@@ -47,13 +47,26 @@ export async function PrmRoleList(data?: { [key: string]: any }) {
 }
 
 /** 获取角色资源 get /prm/role/list */
-export async function PrmRoleResource(data: {
-  roleId: string | number;
-  type: number;
-}) {
+export async function PrmRoleResource(data: { roleId: number; type: number }) {
   return request<API.LoginResult>('/prm/role/resource', {
     method: 'get',
     params: data,
+  });
+}
+
+/** 赋予角色资源 POST/prm/role/grantResource*/
+export async function PostGrantResource(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/grantResource', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 提交资源 POST/prm/submitResource*/
+export async function PostSubmitResource(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/submitResource', {
+    method: 'POST',
+    data,
   });
 }
 

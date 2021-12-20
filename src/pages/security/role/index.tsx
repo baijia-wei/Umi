@@ -6,29 +6,32 @@ import {
   ReactChild,
   ReactFragment,
   ReactPortal,
-  SetStateAction,
   Suspense,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { useRequest } from 'umi';
-import * as dateFns from 'date-fns';
+
 import { IconPlus } from '@douyinfe/semi-icons';
 import Table from '@douyinfe/semi-ui/lib/es/table/Table';
-
-import ccc from '../../../../config/routes';
-import { PrmRoleList, PrmRoleResource } from '@/services/homeApi/api';
+import routes from '../../../../config/routes';
+import {
+  PostGrantResource,
+  PostSubmitResource,
+  PrmRoleList,
+  PrmRoleResource,
+} from '@/services/homeApi/api';
 const Role = () => {
   const [parameter, setparameter] = useState<any>({
     page: 1,
     size: 15,
   });
-
+  const [visible1, setvisible1] = useState(false);
   const [visible, setvisible] = useState(false);
   const [valueterr, setvalueterr] = useState([]);
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
+  const [id, setiD] = useState(0);
 
   const columns = [
     {
@@ -88,16 +91,15 @@ const Role = () => {
     });
   };
   useEffect(() => {
-    setvalue(xxxx(ccc));
+    setvalue(screen(routes));
     getData();
   }, []);
-
   const scroll = useMemo(() => ({ y: 400 }), []);
 
-  const xxxx = (routes: any) => {
+  const screen = (routes: any) => {
     return routes
       .filter((item: any) => {
-        return item.name !== undefined || item.code !== undefined;
+        return item.name !== undefined;
       })
       .map((item: any, index: any) => {
         return {
@@ -108,50 +110,93 @@ const Role = () => {
           code: item.code,
           key: item.key,
           apiRoutes: item.apiRoutes,
-          children: xxxx(item.routes || []),
+          children: screen(item.routes || []),
         };
       });
   };
 
-  function getSome(arr1: any, arr2: any) {
-    let newArr = [];
-    for (let i = 0; i < arr2.length; i++) {
-      for (let j = 0; j < arr1.length; j++) {
-        if (arr1[j].code === arr2[i].code) {
-          newArr.push(arr1[j]);
-        }
-      }
-    }
-    return newArr;
+  function getSome(arr2: any) {
+    return arr2.map((item: { name: any }) => item.name);
   }
 
   // 权限分配弹窗
-  const showDialog = async (id: string | number) => {
-    const lonxxw = [
-      {
-        code: 'bd388aad09f9',
-        name: '图表页面',
-        url: '/dashboard',
-      },
-    ];
+  const showDialog = async (id: number) => {
+    let list: any = [];
+    await PrmRoleResource({
+      roleId: id,
+      type: 20,
+    }).then((item) => {
+      list = item.data;
+    });
+    setiD(id);
 
-    const dwzx: any[] = getSome(valuedx, lonxxw);
-
-    // const lonx = await PrmRoleResource({ roleId: id, type: 20 })
-
-    console.log();
-
-    setvalue(dwzx as any);
-
-    console.log(dwzx);
+    setvalueterr(getSome(list));
 
     setvisible(true);
   };
 
+  const getSomxex = (arr2: string) => {
+    const resources: any = [];
+    valuedx.map((item: any, index: number) => {
+      if (item.name === arr2) {
+        item.children.map(({ code, name, url, apiRoutes }: any) => {
+          resources.push({ code, name, url, apiRoutes });
+        });
+      } else {
+        item.children.map(({ code, name, url, apiRoutes }: any) => {
+          if (name === arr2) {
+            resources.push({ code, name, url, apiRoutes });
+          }
+        });
+      }
+    });
+    return resources;
+  };
+  //数组平摊函数
+  function flat<T>(array: Array<T | T[]>) {
+    const result: T[] = [];
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] instanceof Array) {
+        result.push(...(array[i] as T[]));
+      } else {
+        result.push(array[i] as T);
+      }
+    }
+    return result;
+  }
   // 权限分配弹窗ok确认
-  const handleOk = () => {
-    console.log(valueterr, ' console.log(valuedx);');
-    console.log();
+  const handleOk = async () => {
+    const resources: string[] = [];
+    let resourceCodes: string[] = [];
+
+    valueterr.map((item: any, index: string | number) => {
+      if (typeof item === 'string') {
+        resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
+        resourceCodes = resourceCodes.concat(
+          flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
+        );
+        resources.push(...getSomxex(item));
+      } else {
+        resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
+        resourceCodes = resourceCodes.concat(
+          flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
+        );
+        resources.push(...getSomxex(item[index]));
+      }
+    });
+
+    await PostSubmitResource({
+      resources,
+      type: 20,
+    }).then((res) => {
+      console.log(res);
+    });
+    await PostGrantResource({
+      resourceCodes,
+      roleId: id,
+    }).then((res) => {
+      console.log(res);
+    });
 
     setvisible(false);
   };
@@ -164,11 +209,16 @@ const Role = () => {
     width: 260,
     height: 420,
   };
-
-  const onChange = (value: SetStateAction<never[]>) => {
+  // 路由树
+  const onChange = (value: any) => {
+    console.log(value, 'valueterr');
     setvalueterr(value);
   };
 
+  const handleOk1 = () => {
+    setvisible1(false);
+  };
+  const handleCancel1 = () => {};
   return (
     <PageContainer content="角色权限">
       <GridContent>
@@ -195,6 +245,7 @@ const Role = () => {
           </Card>
         </Suspense>
       </GridContent>
+
       <Modal
         title="分配权限"
         visible={visible}
@@ -204,12 +255,19 @@ const Role = () => {
         <Tree
           treeData={valuedx}
           multiple
+          motion
           onChange={onChange as any}
-          value={valueterr}
+          defaultValue={valueterr}
           defaultExpandAll
           style={style}
         />
       </Modal>
+      <Modal
+        title="创建角色"
+        visible={visible1}
+        onOk={handleOk1}
+        onCancel={handleCancel1}
+      ></Modal>
     </PageContainer>
   );
 };

@@ -75,3 +75,11 @@ export const request = extend({
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],
 });
+export const requestLoging = extend({
+  prefix: 'http://192.168.2.146:7030',
+  timeout: 1000,
+
+  errorHandler, //错误处理
+  requestInterceptors: [authHeaderInterceptor],
+  responseInterceptors: [demoResponseInterceptors],
+});

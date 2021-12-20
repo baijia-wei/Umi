@@ -70,6 +70,37 @@ export async function PostSubmitResource(data: { [key: string]: any }) {
   });
 }
 
+/** 添加角色 POST/prm/role/add*/
+export async function PostPrmRoleAdd(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/add', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 删除角色 POST/prm/role/delete*/
+export async function PostprmRoleDelete(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/delete', {
+    method: 'POST',
+    data,
+  });
+}
+/** 修改角色 POST/prm/role/delete*/
+export async function PostPrmRoleEdit(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/edit', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 获取角色 POST/prm/role/delete*/
+export async function PostPrmRoleGet(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/get', {
+    method: 'POST',
+    data,
+  });
+}
+
 // 演示
 // export async function updateUser(
 //   params: {

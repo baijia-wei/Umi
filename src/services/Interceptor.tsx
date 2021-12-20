@@ -50,7 +50,7 @@ const demoResponseInterceptors = (
 };
 //错误处理
 const errorHandler = (error: error) => {
-  console.log(error);
+  console.log(error, '错误');
 
   if (error.name === 'BizError') {
     notification.error({

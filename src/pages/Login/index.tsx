@@ -35,7 +35,7 @@ const Login: React.FunctionComponent = () => {
       // 登录
       const msg = await login(values);
       if (msg.status === 1) {
-        setToken(msg.data as string);
+        setToken(msg.data as any);
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         history.push('/');

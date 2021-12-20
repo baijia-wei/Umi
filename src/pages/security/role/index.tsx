@@ -1,6 +1,7 @@
 // import { getgetVerifyCode, getNotices } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
-import { Button, Modal, Tree } from '@douyinfe/semi-ui';
+import { Button, Tree } from '@douyinfe/semi-ui';
+import { Modal, Form, Input, Radio } from 'antd';
 import { Card } from 'antd';
 import {
   ReactChild,
@@ -17,11 +18,28 @@ import Table from '@douyinfe/semi-ui/lib/es/table/Table';
 import routes from '../../../../config/routes';
 import {
   PostGrantResource,
+  PostPrmRoleAdd,
+  PostprmRoleDelete,
+  PostPrmRoleEdit,
+  PostPrmRoleGet,
   PostSubmitResource,
   PrmRoleList,
   PrmRoleResource,
 } from '@/services/homeApi/api';
-const Role = () => {
+import TextArea from 'antd/lib/input/TextArea';
+import Popconfirm from 'antd/es/popconfirm';
+
+interface FieldData {
+  roleName: string | number | (string | number)[];
+  description?: any;
+  touched?: boolean;
+
+  errors?: string[];
+}
+const Role: React.FC = () => {
+  const [isfelase, setisfelase] = useState(true);
+  const [form] = Form.useForm();
+  const [fields, setFields] = useState<any>();
   const [parameter, setparameter] = useState<any>({
     page: 1,
     size: 15,
@@ -73,18 +91,33 @@ const Role = () => {
             >
               分配权限
             </Button>
-            <Button type="warning" style={{ marginRight: 8 }}>
+
+            <Button
+              type="warning"
+              style={{ marginRight: 8 }}
+              onClick={() => modify(record.id)}
+            >
               修改
             </Button>
-            <Button type="danger" style={{ marginRight: 8 }}>
-              删除
-            </Button>
+
+            <Popconfirm
+              placement="top"
+              title="确认删除"
+              onConfirm={() => {
+                RoleDelete(record.id);
+              }}
+              okText="确认"
+              cancelText="取消"
+            >
+              <Button type="danger" style={{ marginRight: 8 }}>
+                删除
+              </Button>
+            </Popconfirm>
           </div>
         );
       },
     },
   ];
-
   const getData = () => {
     PrmRoleList(parameter).then((res) => {
       setData(res.data.record);
@@ -119,7 +152,7 @@ const Role = () => {
     return arr2.map((item: { name: any }) => item.name);
   }
 
-  // 权限分配弹窗
+  // 权限分配  弹窗
   const showDialog = async (id: number) => {
     let list: any = [];
     await PrmRoleResource({
@@ -129,9 +162,7 @@ const Role = () => {
       list = item.data;
     });
     setiD(id);
-
     setvalueterr(getSome(list));
-
     setvisible(true);
   };
 
@@ -170,17 +201,13 @@ const Role = () => {
     let resourceCodes: string[] = [];
 
     valueterr.map((item: any, index: string | number) => {
+      resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
+      resourceCodes = resourceCodes.concat(
+        flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
+      );
       if (typeof item === 'string') {
-        resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
-        resourceCodes = resourceCodes.concat(
-          flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
-        );
         resources.push(...getSomxex(item));
       } else {
-        resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
-        resourceCodes = resourceCodes.concat(
-          flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
-        );
         resources.push(...getSomxex(item[index]));
       }
     });
@@ -188,18 +215,15 @@ const Role = () => {
     await PostSubmitResource({
       resources,
       type: 20,
-    }).then((res) => {
-      console.log(res);
     });
     await PostGrantResource({
       resourceCodes,
       roleId: id,
-    }).then((res) => {
-      console.log(res);
     });
 
     setvisible(false);
   };
+
   // 权限分配弹窗取消
   const handleCancel = () => {
     setvisible(false);
@@ -211,14 +235,61 @@ const Role = () => {
   };
   // 路由树
   const onChange = (value: any) => {
-    console.log(value, 'valueterr');
     setvalueterr(value);
   };
 
   const handleOk1 = () => {
+    if (isfelase) {
+      form.validateFields().then((values) => {
+        PostPrmRoleAdd(values).then((ren) => {
+          setvisible1(false);
+          getData();
+        });
+      });
+    } else {
+      form.validateFields().then((values) => {
+        PostPrmRoleEdit({
+          description: values.description,
+          roleId: id,
+          roleName: values.roleName,
+        }).then((res) => {
+          setvisible1(false);
+          getData();
+        });
+      });
+    }
+  };
+  const handleCancel1 = (vale?: any) => {
     setvisible1(false);
   };
-  const handleCancel1 = () => {};
+
+  // 删除角色
+  const RoleDelete = (id: string) => {
+    PostprmRoleDelete({
+      roleId: id,
+    }).then((res) => {
+      getData();
+    });
+  };
+
+  // 修改角色
+  const modify = (id: number) => {
+    setiD(id);
+    setFields({
+      roleName: 'sdasd',
+      description: 'asd',
+    });
+    // PostPrmRoleGet({
+    //   roleId: id
+    // }).then(res => {
+    //   console.log(res);
+    //   setFields(res.data)
+    //   setvisible1(true);
+    // })
+    setvisible1(true);
+    setisfelase(false);
+  };
+
   return (
     <PageContainer content="角色权限">
       <GridContent>
@@ -226,6 +297,9 @@ const Role = () => {
           <Card>
             <Button
               theme="solid"
+              onClick={() => {
+                setvisible1(true);
+              }}
               icon={<IconPlus />}
               type="primary"
               style={{ marginRight: 8 }}
@@ -250,6 +324,7 @@ const Role = () => {
         title="分配权限"
         visible={visible}
         onOk={handleOk}
+        maskClosable={true}
         onCancel={handleCancel}
       >
         <Tree
@@ -262,12 +337,34 @@ const Role = () => {
           style={style}
         />
       </Modal>
+
       <Modal
         title="创建角色"
+        cancelText="Cancel"
         visible={visible1}
         onOk={handleOk1}
+        afterClose={() => {
+          setisfelase(true);
+        }}
         onCancel={handleCancel1}
-      ></Modal>
+      >
+        <Form form={form} layout="vertical" initialValues={fields}>
+          <Form.Item
+            name="roleName"
+            label="姓名"
+            rules={[{ required: true, message: '不能为空' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            rules={[{ required: true, message: '不能为空' }]}
+            label="描述"
+          >
+            <TextArea />
+          </Form.Item>
+        </Form>
+      </Modal>
     </PageContainer>
   );
 };

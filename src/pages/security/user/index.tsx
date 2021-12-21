@@ -32,7 +32,7 @@ const Role = () => {
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
-  const [form4] = Form.useForm();
+
   // 弹窗
   const [visible2, setvisible2] = useState(false);
   const [visible, setvisible] = useState(false);
@@ -370,35 +370,20 @@ const Role = () => {
         onCancel={onCancel2}
         onOk={handleOk2}
       >
-        <Form
-          form={form4}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-          name="form_in_modal"
+        <Checkbox.Group
+          value={checkbox}
+          style={{ width: '100%' }}
+          onChange={onChange}
         >
-          {/* {roleList.map((iten: any, index) => {
-            return <Form.Item key={index} name={iten.id} valuePropName="checked" noStyle>
-              <Checkbox style={{ width: "300px" }} key={index}>{iten.roleName}</Checkbox>
-            </Form.Item>
-          })} */}
-          <Checkbox.Group
-            value={checkbox}
-            style={{ width: '100%' }}
-            onChange={onChange}
-          >
-            {roleList.map((iten: any, index) => {
-              return (
-                <Checkbox key={index} value={iten.id}>
-                  {iten.roleName}
-                </Checkbox>
-              );
-            })}
-          </Checkbox.Group>
-          ,
-        </Form>
+          {roleList.map((iten: any, index) => {
+            return (
+              <Checkbox key={index} value={iten.id}>
+                {iten.roleName}
+              </Checkbox>
+            );
+          })}
+        </Checkbox.Group>
+        ,
       </Modal>
     </PageContainer>
   );

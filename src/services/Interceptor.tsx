@@ -1,7 +1,7 @@
 import { RequestConfig } from 'umi';
 import { extend } from 'umi-request';
 import type { RequestOptionsInit } from 'umi-request';
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 import { getToken } from '@/utils/cookie/auth';
 interface error {
   name: string;
@@ -45,13 +45,11 @@ const demoResponseInterceptors = (
   response: Response,
   options: RequestOptionsInit,
 ) => {
-  response.headers.append('interceptors', 'yes');
   return response;
 };
+
 //错误处理
 const errorHandler = (error: error) => {
-  console.log(error, '错误');
-
   if (error.name === 'BizError') {
     notification.error({
       message: `请求错误 ${error.data.code}`,
@@ -72,9 +70,18 @@ export const request = extend({
     Authorization: 'Bearer ' + (getToken() === undefined ? '' : getToken()),
   },
   errorHandler, //错误处理
+  interceptors: [],
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],
 });
+
+request.interceptors.response.use(async (response, options) => {
+  console.log(response, 'response');
+  if (response.status !== 200) message.info('请求异常');
+
+  return response;
+});
+
 export const requestLoging = extend({
   prefix: 'http://192.168.2.146:7030',
   timeout: 10000,

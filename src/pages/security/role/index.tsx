@@ -299,11 +299,10 @@ const Role: React.FC = () => {
   // 修改角色
   const modify = (id: number) => {
     setiD(id);
-    form.resetFields();
     PostPrmRoleGet({
       roleId: id,
     }).then((res) => {
-      setFields(res.data);
+      form.setFieldsValue(res.data);
       setvisible1(true);
       setisfelase(false);
     });
@@ -369,7 +368,7 @@ const Role: React.FC = () => {
         }}
         onCancel={handleCancel1}
       >
-        <Form form={form} layout="vertical" initialValues={fields}>
+        <Form form={form} layout="vertical">
           <Form.Item
             name="roleName"
             label="姓名"

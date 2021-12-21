@@ -76,7 +76,7 @@ export const request = extend({
   responseInterceptors: [demoResponseInterceptors],
 });
 export const requestLoging = extend({
-  prefix: 'http://192.168.2.146:7030',
+  prefix: 'http://localhost:8080',
   timeout: 1000,
 
   errorHandler, //错误处理

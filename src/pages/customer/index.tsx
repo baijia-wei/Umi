@@ -137,29 +137,21 @@ const CustomerList: React.FunctionComponent = () => {
       valueType: 'option',
       render: (text, record, _, action) => [
         <a
-          key="editable"
-          onClick={() => {
-            action?.startEditable?.(record.userId);
-          }}
-        >
-          编辑
-        </a>,
-        <a
           href={record.userId}
           target="_blank"
           rel="noopener noreferrer"
           key="view"
         >
-          查看
+          详情
         </a>,
-        <TableDropdown
-          key="actionGroup"
-          onSelect={() => action?.reload()}
-          menus={[
-            { key: 'copy', name: '复制' },
-            { key: 'delete', name: '删除' },
-          ]}
-        />,
+        // <TableDropdown
+        //   key="actionGroup"
+        //   onSelect={() => action?.reload()}
+        //   menus={[
+        //     { key: 'copy', name: '复制' },
+        //     { key: 'delete', name: '删除' },
+        //   ]}
+        // />,
       ],
     },
   ];
@@ -215,16 +207,16 @@ const CustomerList: React.FunctionComponent = () => {
       }}
       dateFormatter="string"
       headerTitle="客户管理"
-      toolBarRender={() => [
-        <Button key="button" icon={<PlusOutlined />} type="primary">
-          新建
-        </Button>,
-        <Dropdown key="menu" overlay={menu}>
-          <Button>
-            <EllipsisOutlined />
-          </Button>
-        </Dropdown>,
-      ]}
+      // toolBarRender={() => [
+      //   <Button key="button" icon={<PlusOutlined />} type="primary">
+      //     新建
+      //   </Button>,
+      //   <Dropdown key="menu" overlay={menu}>
+      //     <Button>
+      //       <EllipsisOutlined />
+      //     </Button>
+      //   </Dropdown>,
+      // ]}
     />
   );
 };

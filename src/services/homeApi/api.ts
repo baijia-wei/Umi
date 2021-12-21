@@ -1,8 +1,9 @@
-import { request, requestverifyCode } from '../Interceptor';
+import { request, requestLoging } from '../Interceptor'; //完成
 
-/** 登录接口 POST /api/login/account */ //完成
-export async function login(data: { [key: string]: any }) {
-  return requestverifyCode<API.LoginResult>('/token/login', {
+/** 登录接口 POST /api/login/account */ export async function login(data: {
+  [key: string]: any;
+}) {
+  return requestLoging<API.LoginResult>('/token/login', {
     method: 'POST',
     data,
   });
@@ -18,8 +19,8 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 获取验证码 POST /token/verifyCode*/
 export async function verifyCodes() {
-  return requestverifyCode<Record<string, any>>('/token/verifyCode', {
-    method: 'GET',
+  return requestLoging<Record<string, any>>('/token/verifyCode', {
+    method: 'get',
   });
 }
 
@@ -47,19 +48,55 @@ export async function PrmRoleList(data?: { [key: string]: any }) {
 }
 
 /** 获取角色资源 get /prm/role/list */
-export async function PrmRoleResource(data: {
-  roleId: string | number;
-  type: number;
-}) {
+export async function PrmRoleResource(data: { roleId: number; type: number }) {
   return request<API.LoginResult>('/prm/role/resource', {
     method: 'get',
     params: data,
   });
 }
 
-/** 提交用户资源 POST/prm/submitResource*/
-export async function PostSubmitResource(data?: { [key: string]: any }) {
+/** 赋予角色资源 POST/prm/role/grantResource*/
+export async function PostGrantResource(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/grantResource', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 提交资源 POST/prm/submitResource*/
+export async function PostSubmitResource(data: { [key: string]: any }) {
   return request<API.LoginResult>('/prm/submitResource', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 添加角色 POST/prm/role/add*/
+export async function PostPrmRoleAdd(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/add', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 删除角色 POST/prm/role/delete*/
+export async function PostprmRoleDelete(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/delete', {
+    method: 'POST',
+    data,
+  });
+}
+/** 修改角色 POST/prm/role/delete*/
+export async function PostPrmRoleEdit(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/edit', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 获取角色 POST/prm/role/delete*/
+export async function PostPrmRoleGet(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/get', {
     method: 'POST',
     data,
   });

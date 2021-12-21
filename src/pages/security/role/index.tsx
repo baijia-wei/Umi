@@ -1,34 +1,55 @@
 // import { getgetVerifyCode, getNotices } from '@/services/homeApi/api';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
-import { Button, Modal, Tree } from '@douyinfe/semi-ui';
+import { Button, Tree } from '@douyinfe/semi-ui';
+import { Modal, Form, Input, Radio } from 'antd';
 import { Card } from 'antd';
 import {
   ReactChild,
   ReactFragment,
   ReactPortal,
-  SetStateAction,
   Suspense,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { useRequest } from 'umi';
-import * as dateFns from 'date-fns';
+
 import { IconPlus } from '@douyinfe/semi-icons';
 import Table from '@douyinfe/semi-ui/lib/es/table/Table';
+import routes from '../../../../config/routes';
+import {
+  PostGrantResource,
+  PostPrmRoleAdd,
+  PostprmRoleDelete,
+  PostPrmRoleEdit,
+  PostPrmRoleGet,
+  PostSubmitResource,
+  PrmRoleList,
+  PrmRoleResource,
+} from '@/services/homeApi/api';
+import TextArea from 'antd/lib/input/TextArea';
+import Popconfirm from 'antd/es/popconfirm';
 
-import ccc from '../../../../config/routes';
-import { PrmRoleList, PrmRoleResource } from '@/services/homeApi/api';
-const Role = () => {
+interface FieldData {
+  roleName: string | number | (string | number)[];
+  description?: any;
+  touched?: boolean;
+
+  errors?: string[];
+}
+const Role: React.FC = () => {
+  const [isfelase, setisfelase] = useState(true);
+  const [form] = Form.useForm();
+  const [fields, setFields] = useState<any>();
   const [parameter, setparameter] = useState<any>({
     page: 1,
     size: 15,
   });
-
+  const [visible1, setvisible1] = useState(false);
   const [visible, setvisible] = useState(false);
   const [valueterr, setvalueterr] = useState<any>();
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
+  const [id, setiD] = useState(0);
 
   const columns = [
     {
@@ -70,34 +91,48 @@ const Role = () => {
             >
               分配权限
             </Button>
-            <Button type="warning" style={{ marginRight: 8 }}>
+
+            <Button
+              type="warning"
+              style={{ marginRight: 8 }}
+              onClick={() => modify(record.id)}
+            >
               修改
             </Button>
-            <Button type="danger" style={{ marginRight: 8 }}>
-              删除
-            </Button>
+
+            <Popconfirm
+              placement="top"
+              title="确认删除"
+              onConfirm={() => {
+                RoleDelete(record.id);
+              }}
+              okText="确认"
+              cancelText="取消"
+            >
+              <Button type="danger" style={{ marginRight: 8 }}>
+                删除
+              </Button>
+            </Popconfirm>
           </div>
         );
       },
     },
   ];
-
   const getData = () => {
     PrmRoleList(parameter).then((res) => {
       setData(res.data.record);
     });
   };
   useEffect(() => {
-    setvalue(xxxx(ccc));
+    setvalue(screen(routes));
     getData();
   }, []);
-
   const scroll = useMemo(() => ({ y: 400 }), []);
 
-  const xxxx = (routes: any) => {
+  const screen = (routes: any) => {
     return routes
       .filter((item: any) => {
-        return item.name !== undefined || item.code !== undefined;
+        return item.name !== undefined;
       })
       .map((item: any, index: any) => {
         return {
@@ -108,97 +143,89 @@ const Role = () => {
           code: item.code,
           key: item.key,
           apiRoutes: item.apiRoutes,
-          children: xxxx(item.routes || []),
+          children: screen(item.routes || []),
         };
       });
   };
 
-  function getSome(arr1: any, arr2: any) {
-    let newArr = [];
-    for (let i = 0; i < arr2.length; i++) {
-      for (let j = 0; j < arr1.length; j++) {
-        if (arr1[j].code === arr2[i].code) {
-          newArr.push(arr1[j]);
-        }
-      }
-    }
-    return newArr;
+  function getSome(arr2: any) {
+    return arr2.map((item: { name: any }) => item.name);
   }
 
-  // 权限分配弹窗
-  const showDialog = async (id: string | number) => {
-    const lonxxw = [
-      {
-        code: 'bd388aad09f9',
-        name: '图表页面',
-        url: '/dashboard',
-      },
-    ];
-    const dwzx: any[] = getSome(valuedx, lonxxw);
-
-    console.log(dwzx, 'xxxx');
-
-    // const lonx = await PrmRoleResource({ roleId: id, type: 20 })
-
-    let xsxs = [];
-
-    xsxs.push(lonxxw.map(({ name }) => name));
-
-    setvalueterr(xsxs);
-
+  // 权限分配  弹窗
+  const showDialog = async (id: number) => {
+    let list: any = [];
+    await PrmRoleResource({
+      roleId: id,
+      type: 20,
+    }).then((item) => {
+      list = item.data;
+    });
+    setiD(id);
+    setvalueterr(getSome(list));
     console.log(valueterr);
 
     setvisible(true);
   };
 
-  function getSomex(arr2: any) {
-    const llll: any = [];
-
-    valuedx.map((item: any, index: string | number) => {
+  const getSomxex = (arr2: string) => {
+    const resources: any = [];
+    valuedx.map((item: any, index: number) => {
       if (item.name === arr2) {
-        llll.push({
-          code: item.code,
-          name: item.name,
-          url: item.url,
+        item.children.map(({ code, name, url, apiRoutes }: any) => {
+          resources.push({ code, name, url, apiRoutes });
         });
-
-        item.children.map((item1: any) => {
-          llll.push({
-            code: item1.code,
-            name: item1.name,
-            url: item1.url,
-          });
-        });
-      }
-      item.children.map((item1: any) => {
-        if (item1.name === arr2) {
-          llll.push({
-            code: item1.code,
-            name: item1.name,
-            url: item1.url,
-          });
-        }
-      });
-    });
-
-    return llll;
-  }
-
-  // 权限分配弹窗ok确认
-  const handleOk = () => {
-    const axooo: any = [];
-    valueterr.map((item: any, index: string | number) => {
-      if (typeof item === 'string') {
-        axooo.push(...getSomex(item));
       } else {
-        axooo.push(...getSomex(item[index]));
+        item.children.map(({ code, name, url, apiRoutes }: any) => {
+          if (name === arr2) {
+            resources.push({ code, name, url, apiRoutes });
+          }
+        });
+      }
+    });
+    return resources;
+  };
+  //数组平摊函数
+  function flat<T>(array: Array<T | T[]>) {
+    const result: T[] = [];
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] instanceof Array) {
+        result.push(...(array[i] as T[]));
+      } else {
+        result.push(array[i] as T);
+      }
+    }
+    return result;
+  }
+  // 权限分配弹窗ok确认
+  const handleOk = async () => {
+    const resources: string[] = [];
+    let resourceCodes: string[] = [];
+
+    valueterr.map((item: any, index: string | number) => {
+      resourceCodes.push(...getSomxex(item).map(({ code }: any) => code));
+      resourceCodes = resourceCodes.concat(
+        flat(getSomxex(item).map(({ apiRoutes }: any) => apiRoutes)),
+      );
+      if (typeof item === 'string') {
+        resources.push(...getSomxex(item));
+      } else {
+        resources.push(...getSomxex(item[index]));
       }
     });
 
-    console.log(getSomex('用户权限'));
+    await PostSubmitResource({
+      resources,
+      type: 20,
+    });
+    await PostGrantResource({
+      resourceCodes,
+      roleId: id,
+    });
 
     setvisible(false);
   };
+
   // 权限分配弹窗取消
   const handleCancel = () => {
     setvisible(false);
@@ -208,9 +235,61 @@ const Role = () => {
     width: 260,
     height: 420,
   };
-
-  const onChange = (value: SetStateAction<never[]>) => {
+  // 路由树
+  const onChange = (value: any) => {
     setvalueterr(value);
+  };
+
+  const handleOk1 = () => {
+    if (isfelase) {
+      form.validateFields().then((values) => {
+        PostPrmRoleAdd(values).then((ren) => {
+          setvisible1(false);
+          getData();
+        });
+      });
+    } else {
+      form.validateFields().then((values) => {
+        PostPrmRoleEdit({
+          description: values.description,
+          roleId: id,
+          roleName: values.roleName,
+        }).then((res) => {
+          setvisible1(false);
+          getData();
+        });
+      });
+    }
+  };
+  const handleCancel1 = (vale?: any) => {
+    setvisible1(false);
+  };
+
+  // 删除角色
+  const RoleDelete = (id: string) => {
+    PostprmRoleDelete({
+      roleId: id,
+    }).then((res) => {
+      getData();
+    });
+  };
+
+  // 修改角色
+  const modify = (id: number) => {
+    setiD(id);
+    setFields({
+      roleName: 'sdasd',
+      description: 'asd',
+    });
+    // PostPrmRoleGet({
+    //   roleId: id
+    // }).then(res => {
+    //   console.log(res);
+    //   setFields(res.data)
+    //   setvisible1(true);
+    // })
+    setvisible1(true);
+    setisfelase(false);
   };
 
   return (
@@ -220,6 +299,9 @@ const Role = () => {
           <Card>
             <Button
               theme="solid"
+              onClick={() => {
+                setvisible1(true);
+              }}
               icon={<IconPlus />}
               type="primary"
               style={{ marginRight: 8 }}
@@ -239,20 +321,51 @@ const Role = () => {
           </Card>
         </Suspense>
       </GridContent>
+
       <Modal
         title="分配权限"
         visible={visible}
         onOk={handleOk}
+        maskClosable={true}
         onCancel={handleCancel}
       >
         <Tree
           treeData={valuedx}
           multiple
+          motion
           onChange={onChange as any}
           defaultValue={valueterr}
           defaultExpandAll
           style={style}
         />
+      </Modal>
+
+      <Modal
+        title="创建角色"
+        cancelText="Cancel"
+        visible={visible1}
+        onOk={handleOk1}
+        afterClose={() => {
+          setisfelase(true);
+        }}
+        onCancel={handleCancel1}
+      >
+        <Form form={form} layout="vertical" initialValues={fields}>
+          <Form.Item
+            name="roleName"
+            label="姓名"
+            rules={[{ required: true, message: '不能为空' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            rules={[{ required: true, message: '不能为空' }]}
+            label="描述"
+          >
+            <TextArea />
+          </Form.Item>
+        </Form>
       </Modal>
     </PageContainer>
   );

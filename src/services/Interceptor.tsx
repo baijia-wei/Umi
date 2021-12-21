@@ -50,7 +50,7 @@ const demoResponseInterceptors = (
 };
 //错误处理
 const errorHandler = (error: error) => {
-  console.log(error);
+  console.log(error, '错误');
 
   if (error.name === 'BizError') {
     notification.error({
@@ -75,9 +75,8 @@ export const request = extend({
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],
 });
-
-export const requestverifyCode = extend({
-  prefix: 'http://localhost:8080',
+export const requestLoging = extend({
+  prefix: 'http://192.168.2.146:7030',
   timeout: 1000,
 
   errorHandler, //错误处理

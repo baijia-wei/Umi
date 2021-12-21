@@ -1,14 +1,15 @@
-import React, { useRef } from 'react';
-import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Menu, Dropdown, Switch } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Drawer, Button, Tag, Space, Menu, Dropdown, Switch } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import ProTable, { TableDropdown } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import { PageContainer } from '@ant-design/pro-layout';
+import CustomerDetails from './components/detail';
 import {
-  list,
-  lockWithdraw,
-  lockTrade,
-  lockDeposit,
-} from '@/services/customerApi';
+  customerList,
+  customerLockWithdraw,
+  customerLockTrade,
+  customerLockDeposit,
+} from '@/services/api';
 
 const CustomerList: React.FunctionComponent = () => {
   type CustomerItem = {
@@ -26,6 +27,8 @@ const CustomerList: React.FunctionComponent = () => {
     lastLoginTime: Date;
     registerTime: Date;
   };
+
+  const [selectUserId, setSelectUserId] = useState<string>();
 
   const actionRef = useRef<ActionType>();
 
@@ -137,10 +140,9 @@ const CustomerList: React.FunctionComponent = () => {
       valueType: 'option',
       render: (text, record, _, action) => [
         <a
-          href={record.userId}
-          target="_blank"
-          rel="noopener noreferrer"
-          key="view"
+          onClick={() => {
+            setSelectUserId(record.userId);
+          }}
         >
           详情
         </a>,
@@ -165,59 +167,66 @@ const CustomerList: React.FunctionComponent = () => {
   );
 
   async function switchLockWithdraw(checked: boolean, userId: string) {
-    await lockWithdraw({ userId, locked: checked });
+    await customerLockWithdraw({ userId, locked: checked });
     actionRef.current?.reload();
   }
 
   async function switchLockDeposit(checked: boolean, userId: string) {
-    await lockDeposit({ userId, locked: checked });
+    await customerLockDeposit({ userId, locked: checked });
     actionRef.current?.reload();
   }
 
   async function switchLockTrade(checked: boolean, userId: string) {
-    await lockTrade({ userId, locked: checked });
+    await customerLockTrade({ userId, locked: checked });
     actionRef.current?.reload();
   }
 
   return (
-    <ProTable<CustomerItem>
-      actionRef={actionRef}
-      columns={columns}
-      request={async (params, sort, filter) => {
-        const result = await list({
-          ...params,
-          page: params.current,
-          size: params.pageSize,
-        });
-        return {
-          data: result.data.record,
-          success: result.status == 1,
-          total: result.data.count,
-        };
-      }}
-      rowKey="userId"
-      search={{
-        labelWidth: 'auto',
-      }}
-      pagination={{
-        pageSize: 15,
-      }}
-      rowSelection={{
-        selections: [],
-      }}
-      dateFormatter="string"
-      headerTitle="客户管理"
-      // toolBarRender={() => [
-      //   <Button key="button" icon={<PlusOutlined />} type="primary">
-      //     新建
-      //   </Button>,
-      //   <Dropdown key="menu" overlay={menu}>
-      //     <Button>
-      //       <EllipsisOutlined />
-      //     </Button>
-      //   </Dropdown>,
-      // ]}
-    />
+    <PageContainer>
+      <ProTable<CustomerItem>
+        actionRef={actionRef}
+        columns={columns}
+        request={async (params, sort, filter) => {
+          const result = await customerList({
+            ...params,
+            page: params.current,
+            size: params.pageSize,
+          });
+          return {
+            data: result.data.record,
+            success: result.status == 1,
+            total: result.data.count,
+          };
+        }}
+        rowKey="userId"
+        search={{
+          labelWidth: 'auto',
+        }}
+        pagination={{
+          pageSize: 15,
+        }}
+        rowSelection={{
+          selections: [],
+        }}
+        dateFormatter="string"
+        headerTitle="客户管理"
+        // toolBarRender={() => [
+        //   <Button key="button" icon={<PlusOutlined />} type="primary">
+        //     新建
+        //   </Button>,
+        //   <Dropdown key="menu" overlay={menu}>
+        //     <Button>
+        //       <EllipsisOutlined />
+        //     </Button>
+        //   </Dropdown>,
+        // ]}
+      />
+
+      <CustomerDetails
+        userId={selectUserId || ''}
+        onClose={() => setSelectUserId(undefined)}
+      />
+    </PageContainer>
   );
 };
 

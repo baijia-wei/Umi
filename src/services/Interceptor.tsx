@@ -67,7 +67,7 @@ const errorHandler = (error: error) => {
 
 export const request = extend({
   prefix: 'http://localhost:8080',
-  timeout: 1000,
+  timeout: 100000,
   headers: {
     Authorization: 'Bearer ' + (getToken() === undefined ? '' : getToken()),
   },
@@ -77,7 +77,7 @@ export const request = extend({
 });
 export const requestLoging = extend({
   prefix: 'http://localhost:8080',
-  timeout: 1000,
+  timeout: 100000,
 
   errorHandler, //错误处理
   requestInterceptors: [authHeaderInterceptor],

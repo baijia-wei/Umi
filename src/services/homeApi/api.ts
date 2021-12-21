@@ -96,8 +96,8 @@ export async function PostPrmRoleEdit(data: { [key: string]: any }) {
 /** 获取角色 POST/prm/role/delete*/
 export async function PostPrmRoleGet(data: { [key: string]: any }) {
   return request<API.LoginResult>('/prm/role/get', {
-    method: 'POST',
-    data,
+    method: 'get',
+    params: data,
   });
 }
 

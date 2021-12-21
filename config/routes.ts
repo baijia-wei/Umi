@@ -116,4 +116,14 @@ export default [
       },
     ],
   },
+  {
+    key: '6',
+    path: '/khulist',
+    name: '客户列表',
+    icon: 'smile',
+    code: 'b0a0241444be',
+    apiRoutes: ['b0a0248444be', 'd50f5a560f82'],
+    access: 'normalRouteFilter',
+    component: '@/pages/khulist/index',
+  },
 ];

@@ -73,7 +73,7 @@ const Role = () => {
               onClick={() => {
                 PostUserDisable({
                   userId: record.userId,
-                  Disabled: !record.isDisabled,
+                  disabled: !record.isDisabled,
                 });
               }}
               defaultChecked={record.isDisabled}

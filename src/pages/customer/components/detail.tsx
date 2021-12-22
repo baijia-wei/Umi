@@ -3,8 +3,10 @@ import { Drawer, Tabs, PageHeader, Button, Descriptions } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProList from '@ant-design/pro-list';
 import BettingList from './bettingList';
+import WithdrawList from './withdrawList';
+import DepositList from './depositList';
 import ProDescriptions from '@ant-design/pro-descriptions';
-
+import { customerProfile } from '@/services/api';
 const { TabPane } = Tabs;
 
 export type CustomerDetailProps = {
@@ -15,10 +17,6 @@ export type CustomerDetailProps = {
 const CustomerDetail: React.FunctionComponent<CustomerDetailProps> = (
   props,
 ) => {
-  const bettingList = () => {
-    if (props.userId != '') return <BettingList userId={props.userId} />;
-  };
-
   return (
     <Drawer
       title="客户详情"
@@ -27,27 +25,55 @@ const CustomerDetail: React.FunctionComponent<CustomerDetailProps> = (
       onClose={props.onClose}
       visible={props.userId != ''}
     >
-      <Descriptions size="small" column={3}>
-        <Descriptions.Item label="手机号">{props.userId}</Descriptions.Item>
-        <Descriptions.Item label="注册时间">x</Descriptions.Item>
-        <Descriptions.Item label="注册时间">x</Descriptions.Item>
-        <Descriptions.Item label="充提差额">2017-01-10</Descriptions.Item>
-        <Descriptions.Item label="用户胜率">2017-10-10</Descriptions.Item>
-        <Descriptions.Item label="平台盈利">2017-10-10</Descriptions.Item>
-        <Descriptions.Item label="用户盈亏比列">
-          Gonghu Road, Xihu District, Hangzhou, Zhejiang, China{' '}
-        </Descriptions.Item>
-      </Descriptions>
+      <ProDescriptions
+        title="客户详情"
+        request={async () => {
+          const result = await customerProfile({
+            userId: props.userId,
+          });
+          return {
+            data: result.data,
+            success: result.status == 1,
+          };
+        }}
+      >
+        <ProDescriptions.Item label="手机号" dataIndex="mobile" />
+        <ProDescriptions.Item
+          label="充提差额"
+          dataIndex="depositWithdrawDifference"
+          valueType="money"
+        />
+        <ProDescriptions.Item
+          label="充提比"
+          dataIndex="depositWithdrawRatio"
+          valueType="percent"
+        />
+        <ProDescriptions.Item
+          label="用户胜率"
+          dataIndex="winRate"
+          valueType="percent"
+        />
+        <ProDescriptions.Item
+          label="平台盈利"
+          dataIndex="platformProfit"
+          valueType="money"
+        />
+        <ProDescriptions.Item
+          label="用户亏损比"
+          dataIndex="lossRatio"
+          valueType="percent"
+        />
+      </ProDescriptions>
 
       <Tabs defaultActiveKey="1">
         <TabPane tab="历史充值订单" key="1">
-          <ProList />
+          <DepositList userId={props.userId} />
         </TabPane>
         <TabPane tab="历史提现订单" key="2">
-          <ProList />
+          <WithdrawList userId={props.userId} />
         </TabPane>
         <TabPane tab="历史交易记录" key="3">
-          {bettingList()}
+          <BettingList userId={props.userId} />
         </TabPane>
       </Tabs>
     </Drawer>

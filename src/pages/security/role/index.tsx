@@ -29,6 +29,7 @@ import {
 } from '@/services/homeApi/api';
 import TextArea from 'antd/lib/input/TextArea';
 import Popconfirm from 'antd/es/popconfirm';
+import { useModel } from 'umi';
 
 interface FieldData {
   roleName: string | number | (string | number)[];
@@ -53,6 +54,8 @@ const Role: React.FC = () => {
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
   const [id, setiD] = useState(0);
+
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const columns = [
     {

@@ -34,6 +34,7 @@ const codeMessage: Record<number, string> = {
 
 // 请求前拦截：requestInterceptors
 const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
+  message.success('加载中请稍后', 1);
   return {
     url: `${url}`,
     options: { ...options, interceptors: true },
@@ -57,10 +58,6 @@ const errorHandler = (error: error) => {
     });
     return error.data.code;
   }
-  // notification.error({
-  //   message: `请求错误 服务器错误`,
-
-  // });
 };
 
 export const request = extend({
@@ -75,20 +72,25 @@ export const request = extend({
   responseInterceptors: [demoResponseInterceptors],
 });
 
+// 全局拦截器
 request.interceptors.response.use(async (response, options) => {
-  console.log(response, 'response');
   const data = await response.clone().json();
-  console.log(data);
-
-  if (response.status !== 200) message.info('服务器异常');
-
+  if (data.status === 1) {
+    message.success('成功');
+  }
+  if (data.status !== 1) {
+    message.error(data.msg);
+  }
+  if (response.status !== 200)
+    notification.error({
+      message: `请求错误`,
+    });
   return response;
 });
 
 export const requestLoging = extend({
   prefix: 'http://192.168.2.146:7030',
   timeout: 10000,
-
   errorHandler, //错误处理
   requestInterceptors: [authHeaderInterceptor],
   responseInterceptors: [demoResponseInterceptors],

@@ -5,6 +5,11 @@ export default [
     component: '@/pages/Login/index',
     key: '1',
   },
+  {
+    path: '/',
+    component: '@/pages/khulist',
+    key: '0',
+  },
 
   {
     path: '/index',
@@ -114,25 +119,25 @@ export default [
       },
     ],
   },
-  // {
-  //   key: '6',
-  //   path: '/customer',
-  //   access: 'normalRouteFilter',
-  //   name: '客户管理',
-  //   code: '99d4313377d9',
-  //   icon: 'TeamOutlined',
-  //   component: '@/pages/customer',
-  //   apiRoutes: ['1fa6dcb1c095', '5cf7902ea562', 'a1e622a0edac', '6c3d550dca60'],
-  // },
-
   {
-    key: '7',
-    path: '/khulist',
-    name: '客户列表',
-    icon: 'smile',
-    code: 'b0a0241444be',
-    apiRoutes: ['b0a0248444be', 'd50f5a560f82'],
+    key: '6',
+    path: '/customer',
     access: 'normalRouteFilter',
-    component: '@/pages/khulist/index',
+    name: '客户管理',
+    code: '99d4313377d9',
+    icon: 'TeamOutlined',
+    component: '@/pages/customer',
+    apiRoutes: ['1fa6dcb1c095', '5cf7902ea562', 'a1e622a0edac', '6c3d550dca60'],
   },
+
+  // {
+  //   key: '7',
+  //   path: '/khulist',
+  //   name: '客户列表',
+  //   icon: 'smile',
+  //   code: 'b0a0241444be',
+  //   apiRoutes: [],
+  //   access: 'normalRouteFilter',
+  //   component: '@/pages/khulist/index',
+  // },
 ];

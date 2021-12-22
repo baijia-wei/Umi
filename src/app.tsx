@@ -18,13 +18,10 @@ export async function getInitialState(): Promise<any> {
     try {
       // 获取用户权限
       const msg = await getUserInfo();
-
       const hasRoutes = msg.data.resources.map((item: { name: any }) => {
         return item.name;
       });
-
       return {
-        settings: hasRoutes,
         hasRoutes: hasRoutes, //权限列表
       };
     } catch (error) {

@@ -4,7 +4,7 @@ import { history, useModel, useRequest } from 'umi';
 import './index.less';
 
 import { login, verifyCodes } from '@/services/homeApi/api';
-import { setToken } from '@/utils/cookie/auth';
+import { getToken, setToken } from '@/utils/cookie/auth';
 const Login: React.FunctionComponent = () => {
   // 图片
   const [img, steimg] = useState('');
@@ -13,19 +13,22 @@ const Login: React.FunctionComponent = () => {
 
   // 处理用户权限
   const fetchUserInfo = async () => {
-    await initialState?.fetchUserInfo?.();
+    const userInfo = await initialState?.fetchUserInfo?.();
+    if (userInfo) {
+      await setInitialState(() => ({
+        settings: userInfo,
+      }));
+    }
   };
   // 登录
   const handleSubmit = async (values: API.LoginParams) => {
     values.verifyKey = verifyKey;
-    console.log(values);
     try {
       // 登录
       const msg = await login(values);
       if (msg.status === 1) {
         setToken(msg.data as any);
         await fetchUserInfo();
-
         history.push('/');
       }
     } catch (error) {

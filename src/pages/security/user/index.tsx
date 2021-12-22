@@ -73,7 +73,7 @@ const Role = () => {
               onClick={() => {
                 PostUserDisable({
                   userId: record.userId,
-                  isDisabled: !record.isDisabled,
+                  Disabled: !record.isDisabled,
                 });
               }}
               defaultChecked={record.isDisabled}
@@ -168,6 +168,7 @@ const Role = () => {
     const sada = roleList.map((item: any) => {
       return item.id;
     });
+
     setcheckbox(sada);
     if (type === '1') {
       console.log(roleList);
@@ -192,7 +193,7 @@ const Role = () => {
   // 分配角色确认
   const handleOk2 = () => {
     PostUserGrantRole({
-      roleIds: { ...checkbox },
+      roleIds: checkbox,
       userId: id,
     });
     setvisible2(false);
@@ -366,7 +367,7 @@ const Role = () => {
       >
         <Checkbox.Group
           value={checkbox}
-          style={{ width: '100%' }}
+          style={{ width: '200px', display: 'flex', flexDirection: 'column' }}
           onChange={onChange}
         >
           {roleList.map((iten: any, index) => {

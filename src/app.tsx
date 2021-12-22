@@ -22,9 +22,9 @@ export async function getInitialState(): Promise<any> {
       const hasRoutes = msg.data.resources.map((item: { name: any }) => {
         return item.name;
       });
-      console.log(hasRoutes);
 
       return {
+        settings: hasRoutes,
         hasRoutes: hasRoutes, //权限列表
       };
     } catch (error) {

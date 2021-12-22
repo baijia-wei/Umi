@@ -1,7 +1,8 @@
-import { request, requestLoging } from '../Interceptor';
+import { request, requestLoging } from '../Interceptor'; //完成
 
-/** 登录接口 POST /api/login/account */ //完成
-export async function login(data: { [key: string]: any }) {
+/** 登录接口 POST /api/login/account */ export async function login(data: {
+  [key: string]: any;
+}) {
   return requestLoging<API.LoginResult>('/token/login', {
     method: 'POST',
     data,
@@ -26,7 +27,7 @@ export async function verifyCodes() {
 /** 获取用户权限 get /prm/getUserInfo*/
 export async function getUserInfo() {
   return request<Record<string, any>>('/prm/getUserInfo', {
-    method: 'get',
+    method: 'GET',
   });
 }
 

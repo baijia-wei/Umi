@@ -49,9 +49,7 @@ const Role: React.FC = () => {
   });
   const [visible1, setvisible1] = useState(false);
   const [visible, setvisible] = useState(false);
-
   const [valueterr, setvalueterr] = useState<any>();
-
   const [dataSource, setData] = useState<any>();
   const [valuedx, setvalue] = useState<any>();
   const [id, setiD] = useState(0);

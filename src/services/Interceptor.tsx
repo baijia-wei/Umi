@@ -77,7 +77,10 @@ export const request = extend({
 
 request.interceptors.response.use(async (response, options) => {
   console.log(response, 'response');
-  if (response.status !== 200) message.info('请求异常');
+  const data = await response.clone().json();
+  console.log(data);
+
+  if (response.status !== 200) message.info('服务器异常');
 
   return response;
 });

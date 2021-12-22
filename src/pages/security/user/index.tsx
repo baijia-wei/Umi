@@ -164,13 +164,11 @@ const Role = () => {
     setvisible1(false);
   };
 
-  //修改----------------------------------------------------
   const modify = (id: number, type: string, roleList?: any) => {
     const sada = roleList.map((item: any) => {
       return item.id;
     });
     setcheckbox(sada);
-
     if (type === '1') {
       console.log(roleList);
       PostPrmRoleList({
@@ -193,14 +191,10 @@ const Role = () => {
 
   // 分配角色确认
   const handleOk2 = () => {
-    console.log(checkbox);
-
     PostUserGrantRole({
       roleIds: { ...checkbox },
       userId: id,
     });
-    console.log('xxxxxxxxxxxxx');
-
     setvisible2(false);
   };
 

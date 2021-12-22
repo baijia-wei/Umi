@@ -13,19 +13,7 @@ const Login: React.FunctionComponent = () => {
 
   // 处理用户权限
   const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    console.log(userInfo);
-
-    setInitialState({
-      settings: {
-        isAdmin: 'admin',
-        hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
-      },
-    });
-
-    if (userInfo) {
-      // 设置
-    }
+    await initialState?.fetchUserInfo?.();
   };
   // 登录
   const handleSubmit = async (values: API.LoginParams) => {
@@ -37,20 +25,12 @@ const Login: React.FunctionComponent = () => {
       if (msg.status === 1) {
         setToken(msg.data as any);
         await fetchUserInfo();
-        /** 此方法会跳转到 redirect 参数所在的位置 */
+
         history.push('/');
       }
     } catch (error) {
       Toast.error('失败');
     }
-
-    // 设置用户信息 权限
-    // setInitialState({
-    //   isAdmin: 'admin',
-    //   hasRoutes: ['用户管理', '图表页面', '列表页面'], //权限列表
-    // });
-    // Toast.info('登录成功');
-    // history.push('/');
   };
 
   //点击图片

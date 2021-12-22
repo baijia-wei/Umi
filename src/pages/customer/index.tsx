@@ -4,6 +4,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { PageContainer } from '@ant-design/pro-layout';
 import CustomerDetails from './components/detail';
+import moment from 'moment';
 import {
   customerList,
   customerLockWithdraw,
@@ -95,6 +96,20 @@ const CustomerList: React.FunctionComponent = () => {
       dataIndex: 'registerTime',
       valueType: 'dateTime',
       search: false,
+    },
+    {
+      title: '注册时间',
+      dataIndex: 'registerTime',
+      valueType: 'dateRange',
+      hideInTable: true,
+      search: {
+        transform: (value) => {
+          return {
+            beginTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
     },
     {
       title: '锁定提现',

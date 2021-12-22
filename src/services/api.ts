@@ -34,3 +34,24 @@ export const transactionList = (data: { [key: string]: any }) => {
     data,
   });
 };
+
+export const customerProfile = (data: { [key: string]: any }) => {
+  return request('/customer/profile', {
+    method: 'get',
+    params: data,
+  });
+};
+
+export const withdrawList = (data: { [key: string]: any }) => {
+  return request('/withdraw/order/list', {
+    method: 'POST',
+    data,
+  });
+};
+
+export const depositList = (data: { [key: string]: any }) => {
+  return request('/deposit/list', {
+    method: 'POST',
+    data,
+  });
+};

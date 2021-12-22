@@ -181,6 +181,16 @@ const CustomerList: React.FunctionComponent = () => {
     actionRef.current?.reload();
   }
 
+  const detail = () => {
+    if (selectUserId != '' && selectUserId != undefined)
+      return (
+        <CustomerDetails
+          userId={selectUserId || ''}
+          onClose={() => setSelectUserId('')}
+        />
+      );
+  };
+
   return (
     <PageContainer>
       <ProTable<CustomerItem>
@@ -221,11 +231,7 @@ const CustomerList: React.FunctionComponent = () => {
         //   </Dropdown>,
         // ]}
       />
-
-      <CustomerDetails
-        userId={selectUserId || ''}
-        onClose={() => setSelectUserId(undefined)}
-      />
+      {detail()}
     </PageContainer>
   );
 };

@@ -19,11 +19,13 @@ export async function getInitialState(): Promise<any> {
       // 获取用户权限
       const msg = await getUserInfo();
 
-      console.log(msg);
+      const hasRoutes = msg.data.resources.map((item: { name: any }) => {
+        return item.name;
+      });
+      console.log(hasRoutes);
 
       return {
-        isAdmin: 'admin',
-        hasRoutes: ['查询表格', '角色权限', '角色管理', '分析页面', '详情结构'], //权限列表
+        hasRoutes: hasRoutes, //权限列表
       };
     } catch (error) {
       history.push('/Login/index');

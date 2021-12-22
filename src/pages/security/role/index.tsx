@@ -10,6 +10,7 @@ import {
   Suspense,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -37,6 +38,8 @@ interface FieldData {
   errors?: string[];
 }
 const Role: React.FC = () => {
+  const refTree = useRef<any>(null);
+
   const [isfelase, setisfelase] = useState(true);
   const [form] = Form.useForm();
   const [fields, setFields] = useState<any>();
@@ -148,29 +151,46 @@ const Role: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    setvalueterr(valueterr);
+    valueterxxxrx(valueterr);
+  }, [valueterr]);
+
+  const valueterxxxrx = (valueterr: any) => {
+    return valueterr;
+  };
+
   function getSome(arr2: any) {
+    if (arr2 === []) {
+      return [];
+    }
     return arr2.map((item: { name: any }) => item.name);
   }
 
   // 权限分配  弹窗
-  const showDialog = async (id: number) => {
-    let list: any = [];
-    await PrmRoleResource({
+  const showDialog = (id: number) => {
+    PrmRoleResource({
       roleId: id,
       type: 20,
     }).then((item) => {
-      list = item.data;
+      setvalueterr(getSome(item.data));
+
+      setvisible(true);
     });
     setiD(id);
-    setvalueterr(getSome(list));
-    console.log(valueterr);
-
-    setvisible(true);
   };
 
   const getSomxex = (arr2: string) => {
     const resources: any = [];
     valuedx.map((item: any, index: number) => {
+      if (item.code) {
+        resources.push({
+          code: item.code,
+          name: item.name,
+          url: item.url,
+          apiRoutes: item.apiRoutes,
+        });
+      }
       if (item.name === arr2) {
         item.children.map(({ code, name, url, apiRoutes }: any) => {
           resources.push({ code, name, url, apiRoutes });
@@ -277,19 +297,13 @@ const Role: React.FC = () => {
   // 修改角色
   const modify = (id: number) => {
     setiD(id);
-    setFields({
-      roleName: 'sdasd',
-      description: 'asd',
+    PostPrmRoleGet({
+      roleId: id,
+    }).then((res) => {
+      form.setFieldsValue(res.data);
+      setvisible1(true);
+      setisfelase(false);
     });
-    // PostPrmRoleGet({
-    //   roleId: id
-    // }).then(res => {
-    //   console.log(res);
-    //   setFields(res.data)
-    //   setvisible1(true);
-    // })
-    setvisible1(true);
-    setisfelase(false);
   };
 
   return (
@@ -329,15 +343,17 @@ const Role: React.FC = () => {
         maskClosable={true}
         onCancel={handleCancel}
       >
-        <Tree
-          treeData={valuedx}
-          multiple
-          motion
-          onChange={onChange as any}
-          defaultValue={valueterr}
-          defaultExpandAll
-          style={style}
-        />
+        <div ref={refTree}>
+          <Tree
+            treeData={valuedx}
+            multiple
+            motion
+            onChange={onChange as any}
+            value={valueterr}
+            defaultExpandAll
+            style={style}
+          />
+        </div>
       </Modal>
 
       <Modal
@@ -350,7 +366,7 @@ const Role: React.FC = () => {
         }}
         onCancel={handleCancel1}
       >
-        <Form form={form} layout="vertical" initialValues={fields}>
+        <Form form={form} layout="vertical">
           <Form.Item
             name="roleName"
             label="姓名"

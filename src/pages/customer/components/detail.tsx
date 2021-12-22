@@ -1,7 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { Drawer, Tabs, PageHeader, Button, Descriptions } from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
-import ProList from '@ant-design/pro-list';
 import BettingList from './bettingList';
 import WithdrawList from './withdrawList';
 import DepositList from './depositList';

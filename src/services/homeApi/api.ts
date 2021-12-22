@@ -97,6 +97,54 @@ export async function PostPrmRoleEdit(data: { [key: string]: any }) {
 /** 获取角色 POST/prm/role/delete*/
 export async function PostPrmRoleGet(data: { [key: string]: any }) {
   return request<API.LoginResult>('/prm/role/get', {
+    method: 'get',
+    params: data,
+  });
+}
+
+/** 获取用户 POST/prm/role/delete*/
+export async function PostPrmUserGet(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/user/get', {
+    method: 'get',
+    params: data,
+  });
+}
+
+/** 新增用户 POST/prm/role/delete*/
+export async function PostUserAdd(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/user/add', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 编辑用户 POST/prm/role/delete*/
+export async function PostUserEdit(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/user/edit', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 查询角色列表 POST/prm/role/list*/
+export async function PostPrmRoleList(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/role/list', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 禁用用户 POST/prm/role/list*/
+export async function PostUserDisable(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/user/disable', {
+    method: 'POST',
+    data,
+  });
+}
+
+/** 授予用户角色 POST/prm/role/list*/
+export async function PostUserGrantRole(data: { [key: string]: any }) {
+  return request<API.LoginResult>('/prm/user/grantRole', {
     method: 'POST',
     data,
   });
